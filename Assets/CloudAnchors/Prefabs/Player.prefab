@@ -77,7 +77,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 402737a5186cd48cd86798c77074db79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BallPrefab: {fileID: 1517545619891756, guid: 5692ceb69bfb152469a4f6d2b1b82ace, type: 3}
+  SecondPlayerZone: {fileID: 1517545619891756, guid: 011f85457255185408709f5dbc38aa3c,
+    type: 3}
   StarPrefab: {fileID: 1517545619891756, guid: 12e54071a4b3c764daa4ded6332ecb38, type: 3}
   AnchorPrefab: {fileID: 1517545619891756, guid: b6970d648678ddb498900f7962e14c87,
     type: 3}
-  BallPrefab: {fileID: 1517545619891756, guid: 5692ceb69bfb152469a4f6d2b1b82ace, type: 3}

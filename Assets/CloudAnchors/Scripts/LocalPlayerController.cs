@@ -33,6 +33,7 @@ namespace GoogleARCore.Examples.CloudAnchors
 
         
         public GameObject BallPrefab;
+        public GameObject SecondPlayerZone;
         /// <summary>
         /// The Star model that will represent networked objects in the scene.
         /// </summary>
@@ -84,14 +85,15 @@ namespace GoogleARCore.Examples.CloudAnchors
 #pragma warning disable 618
         [Command]
 #pragma warning restore 618
-        public void CmdSpawnStar(Vector3 position, Quaternion rotation)
+        public void CmdSpawnWall(Vector3 position, Quaternion rotation, float size)
         {
-            // Instantiate Star model at the hit pose.
-            var starObject = Instantiate(StarPrefab, position, rotation);
-
-            // Spawn the object in all clients.
+            position.x += -0.5f;
+            GameObject Wall = Instantiate(SecondPlayerZone , position, rotation);
+            float x = Wall.transform.localScale.x;
+            float y = Wall.transform.localScale.y;
+            Wall.transform.localScale = new Vector3(x,y,size);
 #pragma warning disable 618
-            NetworkServer.Spawn(starObject);
+            NetworkServer.Spawn(Wall);
 #pragma warning restore 618
         }
         
@@ -100,6 +102,16 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             // Instantiate Star model at the hit pose.
             GameObject ballObject = Instantiate(BallPrefab, new Vector3(0,2,0), rotation);
+
+#pragma warning disable 618
+            NetworkServer.Spawn(ballObject);
+#pragma warning restore 618
+
+        }
+
+        public void CmdSpawnSecondPlayerZone(Vector3 position, Quaternion rotation)
+        {
+            GameObject ballObject = Instantiate(BallPrefab, position, rotation);
 
 #pragma warning disable 618
             NetworkServer.Spawn(ballObject);

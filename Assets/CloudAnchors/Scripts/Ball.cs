@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.Networking.NetworkSystem;
 
-public class Ball : MonoBehaviour
+public class Ball : NetworkBehaviour
 {
     public GameObject Player;
-    public bool inPlay = false;
+    [SyncVar] public bool inPlay;
     public float movementSpeed;
     public float dirx,diry,dirz;
     Vector3 direction;

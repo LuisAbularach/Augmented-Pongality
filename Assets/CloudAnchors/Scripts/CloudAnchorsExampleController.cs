@@ -31,6 +31,12 @@ namespace GoogleARCore.Examples.CloudAnchors
     {
         [Header("ARCore")]
 
+        //Size data
+        bool P2ready;
+        //These are references to the back and fronts of the player fields
+        float P2front, P2back;
+
+
         public GameObject SpawnedBall;
         /// <summary>
         /// The UI Controller.
@@ -171,7 +177,8 @@ namespace GoogleARCore.Examples.CloudAnchors
             {
                 return;
             }
-        //touch
+
+        //touch Host
             if(wall_Count == 2 && SpawnedBall!=null)
             {
                 SpawnedBall.GetComponent<Ball>().StartBallMovement();
@@ -201,11 +208,19 @@ namespace GoogleARCore.Examples.CloudAnchors
             // If there was an anchor placed, then instantiate the corresponding object.
             if (m_LastHitPose != null)
             {
+                //touch eveyone not host
+                if(m_CurrentMode != ApplicationMode.Hosting)
+                {
+                    Debug.Log("Place the field for P2");
+                    _InstantiatePlayer2Zone();
+                    return;   
+                }
+                
                 // The first touch on the Hosting mode will instantiate the origin anchor (p1 field). Any
                 // subsequent touch will instantiate a wall, both in Hosting and Resolving modes.
-                if (_CanPlaceStars() && wall_Count!=2)
+                if (_CanPlaceStars() && wall_Count!=2 && P2back > 0)
                 {
-                    _InstantiateStar();
+                    _InstantiateWall();
                     wall_Count += 1;
                     Debug.Log("Wall Count" + wall_Count);
                 }
@@ -341,11 +356,11 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// <summary>
         /// Instantiates a star object that will be synchronized over the network to other clients.
         /// </summary>
-        private void _InstantiateStar()
+        private void _InstantiateWall()
         {
-            // Star must be spawned in the server so a networking Command is used.
+            // Wall is spawned in the server so a networking Command is used.
             GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
-                .CmdSpawnStar(m_LastHitPose.Value.position, Quaternion.Euler(0,0,0));
+                .CmdSpawnWall(m_LastHitPose.Value.position, Quaternion.Euler(0,0,0), 1 + P2back);
 
             Debug.Log("Spawning Ball");
             if(wall_Count==1){
@@ -353,6 +368,22 @@ namespace GoogleARCore.Examples.CloudAnchors
             GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
                 .CmdSpawnBall(m_LastHitPose.Value.position, Quaternion.Euler(0,0,0));
             SpawnedBall = GameObject.Find("Ball(Clone)");
+            }
+        }
+
+        private void _InstantiatePlayer2Zone()
+        {
+            Vector3 P2 = m_LastHitPose.Value.position;
+            //Check to see if z position is at least half a meter away from p1
+            if(P2.z - 0.5f >= 0.0f){
+                GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
+                    .CmdSpawnSecondPlayerZone( P2, Quaternion.Euler(0,0,0));
+                P2back = P2.z + 0.5f;
+                P2front = P2.z - 0.5f;
+            }
+            else
+            {
+                //Not far enough give error 
             }
         }
 
