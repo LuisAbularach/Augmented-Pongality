@@ -34,6 +34,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         
         public GameObject BallPrefab;
         public GameObject SecondPlayerZone;
+
         /// <summary>
         /// The Star model that will represent networked objects in the scene.
         /// </summary>
@@ -87,8 +88,8 @@ namespace GoogleARCore.Examples.CloudAnchors
 #pragma warning restore 618
         public void CmdSpawnWall(Vector3 position, Quaternion rotation, float size)
         {
-            position.x += -0.5f;
-            GameObject Wall = Instantiate(SecondPlayerZone , position, rotation);
+            GameObject Wall = Instantiate(StarPrefab , new Vector3(position.x,position.y,-1.0f), rotation);
+            //Wall.transform.position += new Vector3(0,0,-1);
             float x = Wall.transform.localScale.x;
             float y = Wall.transform.localScale.y;
             Wall.transform.localScale = new Vector3(x,y,size);
@@ -101,7 +102,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         public void CmdSpawnBall(Vector3 position, Quaternion rotation)
         {
             // Instantiate Star model at the hit pose.
-            GameObject ballObject = Instantiate(BallPrefab, new Vector3(0,2,0), rotation);
+            GameObject ballObject = Instantiate(BallPrefab, new Vector3(0,1.0f,0), rotation);
 
 #pragma warning disable 618
             NetworkServer.Spawn(ballObject);
@@ -109,9 +110,12 @@ namespace GoogleARCore.Examples.CloudAnchors
 
         }
 
-        public void CmdSpawnSecondPlayerZone(Vector3 position, Quaternion rotation)
+        public void CmdSpawnSecondPlayerZone(float distanceTocenter, Quaternion rotation)
         {
-            GameObject ballObject = Instantiate(BallPrefab, position, rotation);
+            //We want the new position aligned with the anchor
+            Vector3 position = new Vector3(0,0,distanceTocenter);
+
+            GameObject ballObject = Instantiate(SecondPlayerZone, position, rotation);
 
 #pragma warning disable 618
             NetworkServer.Spawn(ballObject);

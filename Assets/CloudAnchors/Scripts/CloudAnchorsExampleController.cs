@@ -35,6 +35,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         bool P2ready;
         //These are references to the back and fronts of the player fields
         float P2front, P2back;
+        bool canPlaceWall;
 
 
         public GameObject SpawnedBall;
@@ -135,6 +136,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// </summary>
         public void Start()
         {
+            P2back = 0;
 #pragma warning disable 618
             m_NetworkManager = UIController.GetComponent<NetworkManager>();
 #pragma warning restore 618
@@ -207,22 +209,23 @@ namespace GoogleARCore.Examples.CloudAnchors
 
             // If there was an anchor placed, then instantiate the corresponding object.
             if (m_LastHitPose != null)
-            {
-                //touch eveyone not host
-                if(m_CurrentMode != ApplicationMode.Hosting)
-                {
-                    Debug.Log("Place the field for P2");
-                    _InstantiatePlayer2Zone();
-                    return;   
-                }
-                
+            {                
                 // The first touch on the Hosting mode will instantiate the origin anchor (p1 field). Any
                 // subsequent touch will instantiate a wall, both in Hosting and Resolving modes.
-                if (_CanPlaceStars() && wall_Count!=2 && P2back > 0)
+                if (_CanPlaceStars() && wall_Count!=2)
                 {
-                    _InstantiateWall();
-                    wall_Count += 1;
-                    Debug.Log("Wall Count" + wall_Count);
+                    //touch eveyone not host
+                    //if(m_CurrentMode != ApplicationMode.Hosting)
+                    if(!canPlaceWall)
+                    {
+                        Debug.Log("Place the field for P2");
+                        _InstantiatePlayer2Zone();  
+                    }
+                    else{
+                        _InstantiateWall();
+                        wall_Count += 1;
+                        Debug.Log("Wall Count" + wall_Count);
+                    }
                 }
                 else if (!m_IsOriginPlaced && m_CurrentMode == ApplicationMode.Hosting)
                 {
@@ -351,6 +354,12 @@ namespace GoogleARCore.Examples.CloudAnchors
             // The anchor will be spawned by the host, so no networking Command is needed.
             GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
                 .SpawnAnchor(Vector3.zero, Quaternion.identity, m_WorldOriginAnchor);
+
+            //FOR LOCAL PLAYER TESTING
+            //  GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
+            //         .CmdSpawnSecondPlayerZone( 6.0f, Quaternion.Euler(0,0,0));
+            // P2back = 6.5f;
+            // P2front = 5.5f;
         }
 
         /// <summary>
@@ -375,16 +384,20 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             Vector3 P2 = m_LastHitPose.Value.position;
             //Check to see if z position is at least half a meter away from p1
-            if(P2.z - 0.5f >= 0.0f){
+            //if(P2.z - 0.5f >= 0.0f){
                 GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
-                    .CmdSpawnSecondPlayerZone( P2, Quaternion.Euler(0,0,0));
+                    .CmdSpawnSecondPlayerZone( P2.z, Quaternion.Euler(0,0,0));
                 P2back = P2.z + 0.5f;
                 P2front = P2.z - 0.5f;
-            }
-            else
-            {
-                //Not far enough give error 
-            }
+
+                canPlaceWall = true;
+                Debug.Log("Zone Placed!");  
+            //}
+            // else
+            // {
+            //     //Not far enough give error 
+            //     P2back = 0;
+            // }
         }
 
         /// <summary>
