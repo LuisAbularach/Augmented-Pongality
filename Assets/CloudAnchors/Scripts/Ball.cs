@@ -74,16 +74,17 @@ public class Ball : NetworkBehaviour
         // }
     }
 
-    public void StartBallMovement()
-    {
-        Debug.Log("inPlay: " + inPlay);
-        Debug.Log("Start Ball Moving");
-        inPlay = true;
-        Debug.Log(inPlay);
+    // public void StartBallMovement()
+    // {
+    //     Debug.Log("inPlay: " + inPlay);
+    //     Debug.Log("Start Ball Moving");
+    //     inPlay = true;
+    //     Debug.Log(inPlay);
 
-        // transform.position += direction * Time.deltaTime * movementSpeed;
+    //     // transform.position += direction * Time.deltaTime * movementSpeed;
         
-    }
+    // }
+
 
     void OnCollisionEnter(Collision col){
         // if(col.gameObject.name == "Wall" || col.gameObject.name == "AR Default Plane"){
@@ -161,6 +162,11 @@ public class Ball : NetworkBehaviour
     public void CmdsetDirection(Vector3 dir)
     {
         direction = dir;
+    }
+
+    public void StartBallMovement()
+    {
+        inPlay = true;
     }
 
     // public void SetPosition(GameObject camera)
