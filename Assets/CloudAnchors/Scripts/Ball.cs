@@ -139,7 +139,8 @@ public class Ball : NetworkBehaviour
             }
             angle = paddle.transform.rotation.eulerAngles.y;
             Debug.Log("paddle : "+ angle);
-            direction = new Vector3(x, 0, z);
+            // direction = new Vector3(x, 0, z);
+            CmdsetDirection(new Vector3(x, 0, z));
 //            PreviousLocation = (int)PreviouslyCameFrom.Paddle;
         }
 
@@ -154,6 +155,12 @@ public class Ball : NetworkBehaviour
     private float RadianToDegree(float angle)
     {
         return angle * (180.0f / Mathf.PI);
+    }
+    
+    [Command]
+    public void CmdsetDirection(Vector3 dir)
+    {
+        direction = dir;
     }
 
     // public void SetPosition(GameObject camera)
