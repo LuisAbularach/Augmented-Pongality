@@ -98,7 +98,7 @@ namespace GoogleARCore.Examples.CloudAnchors
 #pragma warning restore 618
         }
         
-
+        [Command]
         public void CmdSpawnBall(Vector3 position, Quaternion rotation)
         {
             // Instantiate Star model at the hit pose.
@@ -110,6 +110,7 @@ namespace GoogleARCore.Examples.CloudAnchors
 
         }
 
+        [Command]
         public void CmdSpawnSecondPlayerZone(float distanceTocenter, Quaternion rotation)
         {
             //We want the new position aligned with the anchor
