@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 6945876824399567537}
   - component: {fileID: 3808143684047562874}
   - component: {fileID: 5513045103010944008}
-  - component: {fileID: 8694012753585563630}
   - component: {fileID: 4272055250686566570}
+  - component: {fileID: 8694012753585563630}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -69,7 +69,7 @@ MonoBehaviour:
     i14: 0
     i15: 0
   m_ServerOnly: 0
-  m_LocalPlayerAuthority: 1
+  m_LocalPlayerAuthority: 0
 --- !u!114 &6945876824399567537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,6 +116,19 @@ MonoBehaviour:
   paddle: {fileID: 0}
   angle: 0
   PreviousLocation: 0
+--- !u!135 &4272055250686566570
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1517545619891756}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.05
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!54 &8694012753585563630
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -130,21 +143,8 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 36
+  m_Constraints: 116
   m_CollisionDetection: 0
---- !u!135 &4272055250686566570
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1517545619891756}
-  m_Material: {fileID: 13400000, guid: 8a96d9ad667fb4747aacbd398e682759, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.05
-  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1 &7958168587696774934
 GameObject:
   m_ObjectHideFlags: 0

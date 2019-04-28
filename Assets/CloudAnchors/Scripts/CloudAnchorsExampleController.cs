@@ -23,11 +23,12 @@ namespace GoogleARCore.Examples.CloudAnchors
     using GoogleARCore;
     using UnityEngine;
     using UnityEngine.Networking;
+    using UnityEngine.SceneManagement;
 
-    // #if UNITY_EDITOR
-    // // Set up touch input propagation while using Instant Preview in the editor.
-    // using Input = InstantPreviewInput;
-    // #endif
+#if UNITY_EDITOR
+    // Set up touch input propagation while using Instant Preview in the editor.
+    using Input = InstantPreviewInput;
+    #endif
 
     /// <summary>
     /// Controller for the Cloud Anchors Example. Handles the ARCore lifecycle.
@@ -35,13 +36,15 @@ namespace GoogleARCore.Examples.CloudAnchors
     public class CloudAnchorsExampleController : MonoBehaviour
     {
         [Header("ARCore")]
-
+    
         //Size data
         bool P2ready;
         //These are references to the back and fronts of the player fields
         float P2front, P2back;
         bool canPlaceWall;
+        public GameObject Player2Zone;
 
+        public GameObject LeftWall,RightWall;
 
         public GameObject SpawnedBall;
         /// <summary>
@@ -164,6 +167,42 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             _UpdateApplicationLifecycle();
 
+            //If not host search for objects
+            if(m_CurrentMode != ApplicationMode.Hosting && wall_Count <=2)
+            {
+                Player2Zone = GameObject.Find("Player2Zone(Clone)");
+                if(Player2Zone!=null)
+                {
+                    P2back = Player2Zone.transform.position.z + 0.5f;
+                    Debug.Log("GOT P2Back distance: " + P2back);
+                }
+
+
+                GameObject wall = GameObject.Find("Wall(Clone)");
+                if(wall!=null){
+                    if(wall.transform.position.x < 0 && LeftWall == null)
+                    {
+                        Debug.Log("LEFT WALL FOUND");
+                        LeftWall = wall;
+                        LeftWall.name = "LeftWall";
+                        float x = LeftWall.transform.localScale.x;
+                        float y = LeftWall.transform.localScale.y;
+                        LeftWall.transform.localScale = new Vector3(x,y,P2back);
+                        wall_Count += 1;
+                    }
+                    else if(RightWall == null)
+                    {
+                        Debug.Log("RIGHT WALL FOUND");
+                        RightWall = wall;
+                        RightWall.name = "RightWall";
+                        float x = RightWall.transform.localScale.x;
+                        float y = RightWall.transform.localScale.y;
+                        RightWall.transform.localScale = new Vector3(x,y,P2back);
+                        wall_Count += 1;
+                    }
+                }
+            }
+
             // If we are neither in hosting nor resolving mode then the update is complete.
             if (m_CurrentMode != ApplicationMode.Hosting &&
                 m_CurrentMode != ApplicationMode.Resolving)
@@ -213,7 +252,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             }
 
             // If there was an anchor placed, then instantiate the corresponding object.
-            if (m_LastHitPose != null)
+            if (m_LastHitPose != null && m_CurrentMode == ApplicationMode.Hosting)
             {                
                 // The first touch on the Hosting mode will instantiate the origin anchor (p1 field). Any
                 // subsequent touch will instantiate a wall, both in Hosting and Resolving modes.
@@ -359,12 +398,6 @@ namespace GoogleARCore.Examples.CloudAnchors
             // The anchor will be spawned by the host, so no networking Command is needed.
             GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
                 .SpawnAnchor(Vector3.zero, Quaternion.identity, m_WorldOriginAnchor);
-
-            //FOR LOCAL PLAYER TESTING
-            //  GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
-            //         .CmdSpawnSecondPlayerZone( 6.0f, Quaternion.Euler(0,0,0));
-            // P2back = 6.5f;
-            // P2front = 5.5f;
         }
 
         /// <summary>
@@ -466,10 +499,12 @@ namespace GoogleARCore.Examples.CloudAnchors
                 m_MatchStarted = true;
             }
 
-            // Exit the app when the 'back' button is pressed.
+            // Restart scene when the 'back' button is pressed if not on lobby screen.
             if (Input.GetKey(KeyCode.Escape))
             {
+                // GameObject.Destroy(GameObject.Find("NetworkManagerObject"));
                 Application.Quit();
+                //  SceneManager.LoadScene("Augmented-Pongality", LoadSceneMode.Single);
             }
 
             var sleepTimeout = SleepTimeout.NeverSleep;

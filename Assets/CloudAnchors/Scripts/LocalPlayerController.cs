@@ -88,14 +88,24 @@ namespace GoogleARCore.Examples.CloudAnchors
 #pragma warning restore 618
         public void CmdSpawnWall(Vector3 position, Quaternion rotation, float size)
         {
-            GameObject Wall = Instantiate(StarPrefab , new Vector3(position.x,position.y,-1.0f), rotation);
+            GameObject Wall = Instantiate(StarPrefab , new Vector3(position.x,position.y,-0.5f), rotation);
             //Wall.transform.position += new Vector3(0,0,-1);
-            float x = Wall.transform.localScale.x;
-            float y = Wall.transform.localScale.y;
-            Wall.transform.localScale = new Vector3(x,y,size);
+           
 #pragma warning disable 618
             NetworkServer.Spawn(Wall);
 #pragma warning restore 618
+
+            //Set wall size (cannot send dynamically sized wall through server)
+             if(position.x < 0){
+                Wall.name = "LeftWall";
+            }
+            else
+            {
+                Wall.name = "RightWall";
+            }
+            float x = Wall.transform.localScale.x;
+            float y = Wall.transform.localScale.y;
+            Wall.transform.localScale = new Vector3(x,y,size);
         }
         
 
