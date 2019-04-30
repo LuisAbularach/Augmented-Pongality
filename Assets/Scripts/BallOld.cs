@@ -1,143 +1,11 @@
-﻿// using System.Collections;
-// using System.Collections.Generic;
-// using UnityEngine;
-
-// public class BallOld : MonoBehaviour
-// {
-// public GameObject Player;
-// bool inPlay;
-// // Start is called before the first frame update
-// public Vector3 direction;
-// bool okay = false;
-// public GameObject sign;
-// public GameObject paddle;
-// public float speed = 8f;
-// public GameObject enemyWall;
-
-// public float angle;
-// public int PreviousLocation;
-// public int Quad;
-// private Rigidbody rb;
-// void Start()
-// {
-// inPlay = false;
-// direction = Vector3.forward;
-// rb = gameObject.GetComponent<Rigidbody>();
-// }
-
-// // Update is called once per frame
-// void Update()
-// {
-// if (transform.position.z >= 30)// GAME OVER
-// {
-// transform.position = new Vector3(0f, 3.66f, 30f);
-// sign.transform.position = new Vector3(15, 10, -5);
-// angle = 90;
-// }
-
-
-// if (inPlay)
-// {
-// // transform.position += direction * Time.deltaTime * movementSpeed;
-// }
-
-
-// if (Input.GetKeyDown(KeyCode.Space))
-// {
-// //start game
-// inPlay = true;
-// Debug.Log("click");
-// rb.velocity = new Vector3(0f, 0f, speed);
-
-// }
-// Debug.Log("VELOCITY: " + gameObject.GetComponent<Rigidbody>().velocity);
-// }
-
-// private float DegreeToRadian(float angle)
-// {
-// return Mathf.PI * angle / 180.0f;
-// }
-
-// private float RadianToDegree(float angle)
-// {
-// return angle * (180.0f / Mathf.PI);
-// }
-
-// void OnCollisionEnter(Collision col)
-// {
-
-
-// if ( (col.gameObject.name == "paddle" && !okay ) ||
-// (col.gameObject.name == "Opponent NEW wall" && !okay) )
-// {
-// float x = 0;
-// float z = 0;
-//     if (col.gameObject.name == "paddle")
-//     {
-//     Debug.Log("Detected paddle");
-//     Debug.Log("Euler angle y: " + paddle.transform.rotation.eulerAngles.y);
-//     float PaddleAngle = paddle.transform.rotation.eulerAngles.y;
-//     x = -1 * Mathf.Cos(DegreeToRadian(PaddleAngle) + Mathf.PI + Mathf.PI/2);
-//     z = Mathf.Sin(DegreeToRadian(PaddleAngle) + Mathf.PI + Mathf.PI/2);
-//     Debug.Log("Paddle: Cos x: " + x + " sin z: " + z);
-//     }
-//     if (col.gameObject.name == "Opponent NEW wall")
-//     {
-//     Debug.Log("Detected ENEMY player 2 paddle");
-
-//     float enemyPaddleAngle = enemyWall.transform.rotation.eulerAngles.y;
-//     x = -1 * Mathf.Cos(DegreeToRadian(enemyPaddleAngle) + Mathf.PI/2);
-//     z = Mathf.Sin(DegreeToRadian(enemyPaddleAngle) + Mathf.PI/2);
-// }
-
-
-// float xComp = Mathf.Abs(x);
-// float zComp = Mathf.Abs(z);
-// float maxi = Mathf.Max(xComp, zComp);
-// if (maxi == xComp)
-// {
-// float xPartMax = speed / xComp;
-// x *= xPartMax;
-// z *= xPartMax;
-// }
-// else
-// {
-// float zPartMax = speed / zComp;
-// x *= zPartMax;
-// z *= zPartMax;
-// }
-// // Now that we have ratio, we have to increase its proportions
-// // Get maximum of x and z
-// rb.velocity = new Vector3(x, 0f, z);
-
-
-
-// }
-
-// if (col.gameObject.name == "Purple Wall")
-// {
-// Debug.Log("Purple Wall Hit.");
-// }
-
-// if (col.gameObject.name == "Orange Wall")
-// {
-// Debug.Log("Orange Wall Hit.");
-// }
-
-
-
-
-// }
-// }
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public class BallOld : MonoBehaviour
 {
     // use an array or enum to keep track of where ball previously was, then hit thing
-    enum PreviouslyCameFrom {Paddle, OrangeWall, PurpleWall, EnemyPaddle};
+    enum PreviouslyCameFrom {Paddle, LeftWall, RightWall, EnemyPaddle};
     
     public GameObject Player;
     public bool inPlay;
@@ -149,7 +17,9 @@ public class BallOld : MonoBehaviour
     public GameObject sign;
     public GameObject paddle;
     public float angle;
-    public int PreviousLocation;
+    public static int PreviousLocation;
+
+    
     void Start()
     {
         inPlay = false;
@@ -159,12 +29,13 @@ public class BallOld : MonoBehaviour
     void Update()
     {
         //Debug.Log(paddle.transform.rotation.eulerAngles.y);
-        if (transform.position.z >= 30)
-        {
-            transform.position = new Vector3(0f, 3.66f, 30f);
-            sign.transform.position = new Vector3(15, 10, -5);
-            angle = 90;
-        }
+        // if (transform.position.z >= 30)
+        // {
+        //     transform.position = new Vector3(0f, 3.66f, 30f);
+        //     Score.enemy = true;
+        //     Score.scoreUpdated = true;
+        //     angle = 90;
+        // }
        
         if (!inPlay) // inPlay == false
         {
@@ -182,12 +53,24 @@ public class BallOld : MonoBehaviour
             Debug.Log("click");
         }
 
-        if(Input.GetKeyDown(KeyCode.R))
+        if (transform.position.z >= 30)
         {
             movementSpeed = Math.Abs(movementSpeed);
             inPlay = false;
+            Score.enemy = true;
             transform.position = new Vector3(0,4,13);
-            direction = new Vector3(0,0,1);
+            if (Score.your)
+            {
+                direction = new Vector3(0,0,1);
+                Score.your = false;
+            }
+                
+            else
+            {
+                direction = new Vector3(0, 0, -1);
+                Score.enemy = false;
+            }
+                
         }
     }
     private float DegreeToRadian(float angle)
@@ -201,22 +84,19 @@ public class BallOld : MonoBehaviour
     void OnCollisionEnter(Collision col)
     {
         
-        if (col.gameObject.name == "paddle" && !okay)
+        if (col.gameObject.name == "paddle")
         {
             Debug.Log("Detected paddle");
-            //Debug.Log("Eulger angle x: " + paddle.transform.rotation.eulerAngles.x +
-            //" Euler angle z: " + paddle.transform.rotation.eulerAngles.z);
+            
             Debug.Log("Euler angle y: " + paddle.transform.rotation.eulerAngles.y);
-            //direction = Vector3.back;
-            //transform.Rotate(new Vector3(0, 1, 0), paddle.transform.rotation.eulerAngles.y);
             float xAngle = paddle.transform.rotation.eulerAngles.y;
             float zAngle = paddle.transform.rotation.eulerAngles.y;
             float x = -1 * Mathf.Cos(DegreeToRadian(xAngle) + Mathf.PI + (Mathf.PI / 2) );
             float z = Mathf.Sin(DegreeToRadian(zAngle) + Mathf.PI + (Mathf.PI / 2));
-            // float x = Mathf.Cos(DegreeToRadian(xAngle + 90));
-            // float z = Mathf.Sin(DegreeToRadian(zAngle + 90));
-            Debug.Log("cos x: " + RadianToDegree(x) + "sin z" + RadianToDegree(z));
             
+            Debug.Log("cos x: " + RadianToDegree(x) + "sin z" + RadianToDegree(z));
+            if (movementSpeed < 31)
+                movementSpeed++;
             // keep angle between quadrants III & IV
             if ((paddle.transform.rotation.eulerAngles.y >= 0 && paddle.transform.rotation.eulerAngles.y <= 90)||
             (paddle.transform.rotation.eulerAngles.y > 180 && paddle.transform.rotation.eulerAngles.y < 270)){
@@ -229,10 +109,7 @@ public class BallOld : MonoBehaviour
                     movementSpeed = movementSpeed * -1;
                 }
             }
-            // else
-            // {
-            //      angle = paddle.transform.rotation.eulerAngles.y
-            // }
+            
             else{
             Debug.Log("-90 < rotation < 0");    
             angle = paddle.transform.rotation.eulerAngles.y;
@@ -247,31 +124,30 @@ public class BallOld : MonoBehaviour
         }
         if (col.gameObject.name == "LeftWall")
         {
-            float newAngle = (90 - angle) * -1;
-            float x = Mathf.Cos(DegreeToRadian(newAngle));
-            float z = Mathf.Sin(DegreeToRadian(newAngle));
-            Debug.Log("Purple Wall cos x: " + RadianToDegree(x) + " sin z: " + RadianToDegree(z));
-            angle = newAngle;
-            direction = new Vector3(x, 0, z);
+            Vector3 vel = direction;
+            
+            direction = new Vector3(vel.x * -1, 0, vel.z);
+            
+            PreviousLocation = (int)PreviouslyCameFrom.LeftWall;
         }
+
         if (col.gameObject.name == "RightWall")
         {
-            float newAngle = 360 - angle;
-            float newAngle1 = 90 - newAngle;
-            float nA = 180 - (newAngle1 * 2);
-            float nA1 = newAngle1 + 90 + nA;
-            float x = Mathf.Cos(DegreeToRadian(nA1));
-            float z = Mathf.Sin(DegreeToRadian(nA1));
-            angle = nA1;
-            direction = new Vector3(x, 0, z);
-            Debug.Log("ORANGE Wall: cos x: " + RadianToDegree(x) + " sin z: " + RadianToDegree(z));
+            Vector3 vel = direction;
+            
+            direction = new Vector3(vel.x * -1, 0, vel.z);
+
+            PreviousLocation = (int)PreviouslyCameFrom.RightWall;
+
         }
-        if (col.gameObject.name == "Opponent Wall" && !okay)
+        if (col.gameObject.name == "Opponent Wall")
         {
             // x and z axes are concerned
-            direction = Vector3.forward;
+            Vector3 vel = direction;
             ///*direction*/ = new Vector3(1, 0, 1);
-            Debug.Log("Detected player 2 paddle");
+            direction = new Vector3(vel.x, 0, vel.z * -1);
+            Debug.Log("Detected Opponent Wall paddle");
+            PreviousLocation = (int)PreviouslyCameFrom.EnemyPaddle;
         }
     }
 }
