@@ -29,13 +29,22 @@ public class BallOld : MonoBehaviour
     void Update()
     {
         //Debug.Log(paddle.transform.rotation.eulerAngles.y);
-        // if (transform.position.z >= 30)
-        // {
-        //     transform.position = new Vector3(0f, 3.66f, 30f);
-        //     Score.enemy = true;
-        //     Score.scoreUpdated = true;
-        //     angle = 90;
-        // }
+        if (transform.position.z <=  -30)
+        {
+            // transform.position = new Vector3(0f, 3.66f, 0f);
+            Score.ChangeScore(1);
+            // direction = new Vector3(0f, 0f, 1f);
+            angle = 90;
+
+            movementSpeed = Math.Abs(movementSpeed);
+            inPlay = false;
+            transform.position = new Vector3(0, 4, 0);
+            float randAngle = UnityEngine.Random.Range(10f, 170f);
+            Debug.Log("Winner\'s Random Angle is: " + randAngle);
+            float xComp = -1 * Mathf.Cos(DegreeToRadian(randAngle) );
+            float zComp = Mathf.Sin(DegreeToRadian(randAngle));
+            direction = new Vector3(xComp, 0, zComp);
+        }
        
         if (!inPlay) // inPlay == false
         {
@@ -53,23 +62,20 @@ public class BallOld : MonoBehaviour
             Debug.Log("click");
         }
 
-        if (transform.position.z >= 30)
+        if (transform.position.z >= 30) // Enemy Won
         {
+            Score.ChangeScore(2);
             movementSpeed = Math.Abs(movementSpeed);
             inPlay = false;
-            Score.enemy = true;
-            transform.position = new Vector3(0,4,13);
-            if (Score.your)
-            {
-                direction = new Vector3(0,0,1);
-                Score.your = false;
-            }
-                
-            else
-            {
-                direction = new Vector3(0, 0, -1);
-                Score.enemy = false;
-            }
+            transform.position = new Vector3(0, 4, 0);
+            float randAngle = UnityEngine.Random.Range(10f, 170f);
+            Debug.Log("Winner\'s Random Angle is: " + randAngle);
+            float xComp = -1 * Mathf.Cos(DegreeToRadian(randAngle) );
+            float zComp = Mathf.Sin(DegreeToRadian(randAngle));
+            if (zComp >= 0)
+                zComp *= -1;
+            direction = new Vector3(xComp, 0, zComp);
+            
                 
         }
     }
@@ -89,17 +95,26 @@ public class BallOld : MonoBehaviour
             Debug.Log("Detected paddle");
             
             Debug.Log("Euler angle y: " + paddle.transform.rotation.eulerAngles.y);
-            float xAngle = paddle.transform.rotation.eulerAngles.y;
-            float zAngle = paddle.transform.rotation.eulerAngles.y;
-            float x = -1 * Mathf.Cos(DegreeToRadian(xAngle) + Mathf.PI + (Mathf.PI / 2) );
-            float z = Mathf.Sin(DegreeToRadian(zAngle) + Mathf.PI + (Mathf.PI / 2));
+            float paddleYAngle = paddle.transform.rotation.eulerAngles.y;
+            float x, z;
+            if (direction.z < 0)
+            {
+                x = -1 * Mathf.Cos(DegreeToRadian(paddleYAngle) + (Mathf.PI / 2) );
+                z = Mathf.Sin(DegreeToRadian(paddleYAngle) + (Mathf.PI / 2));
+            }
+            else
+            {
+                x = -1 * Mathf.Cos(DegreeToRadian(paddleYAngle) + Mathf.PI + (Mathf.PI / 2) );
+                z = Mathf.Sin(DegreeToRadian(paddleYAngle) + Mathf.PI + (Mathf.PI / 2));
+            }
+            
             
             Debug.Log("cos x: " + RadianToDegree(x) + "sin z" + RadianToDegree(z));
             if (movementSpeed < 31)
                 movementSpeed++;
             // keep angle between quadrants III & IV
-            if ((paddle.transform.rotation.eulerAngles.y >= 0 && paddle.transform.rotation.eulerAngles.y <= 90)||
-            (paddle.transform.rotation.eulerAngles.y > 180 && paddle.transform.rotation.eulerAngles.y < 270)){
+            if ((paddleYAngle >= 0 && paddleYAngle <= 90) ||
+                (paddleYAngle > 180 && paddleYAngle < 270)){
                 Debug.Log("0 < rotation < 90");
                 angle = paddle.transform.rotation.eulerAngles.y * -1;
 

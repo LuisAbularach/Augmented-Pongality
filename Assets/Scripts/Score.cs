@@ -6,37 +6,29 @@ public class Score : MonoBehaviour
 {
     public static int yourScore;
     public static int enemyScore;
-
-    public static bool your;
-    public static bool enemy;
     // Start is called before the first frame update
 
-    public static bool scoreUpdated;
+    
     void Start()
     {
         yourScore = enemyScore = 0;
-        your = enemy = scoreUpdated = false;
-
     }
 
-    // Update is called once per frame
-    void Update()
+ 
+
+    public static int ChangeScore(int whoWon)
     {
-        if (enemy && scoreUpdated) // enemy one reset round
+        if (whoWon == 1) // you Won
         {
-            scoreUpdated = false;
-            enemyScore++;
-            // enemy = false;
-            Debug.Log("Enemy Score is: " + enemyScore);
-            
-        }
-        if (your && scoreUpdated)
-        {
-            scoreUpdated = false;
             yourScore++;
-            Debug.Log("Your Score is: " + yourScore);
-            
-            // your = false;
+            Debug.Log("Player 1 score: " + yourScore);
+            return 1;
+        }
+        else  // enemy won
+        {
+            enemyScore++;
+            Debug.Log("Player 2 Enemy won score: " + enemyScore);
+            return 2;
         }
     }
 }
