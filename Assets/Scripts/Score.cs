@@ -18,17 +18,21 @@ public class Score : MonoBehaviour
 
     public static int ChangeScore(int whoWon)
     {
+        int won;
         if (whoWon == 1) // you Won
         {
             yourScore++;
-            Debug.Log("Player 1 score: " + yourScore);
-            return 1;
+            // Debug.Log("Player 1 score: " + yourScore);
+            won = 1;
         }
         else  // enemy won
         {
             enemyScore++;
-            Debug.Log("Player 2 Enemy won score: " + enemyScore);
-            return 2;
+            // Debug.Log("Player 2 Enemy won score: " + enemyScore);
+            won = 2;
         }
+        Debug.Log("Player 1 score: " + yourScore);
+        Debug.Log("Player 2 Enemy Score: " + enemyScore);
+        return won;
     }
 }
