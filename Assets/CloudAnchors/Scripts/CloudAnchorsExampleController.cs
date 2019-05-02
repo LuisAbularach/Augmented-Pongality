@@ -224,7 +224,7 @@ namespace GoogleARCore.Examples.CloudAnchors
                 return;
             }
 
-        //touch Host
+        //touch
             if(wall_Count == 2 && SpawnedBall!=null)
             {
                 SpawnedBall.GetComponent<Ball>().StartBallMovement();

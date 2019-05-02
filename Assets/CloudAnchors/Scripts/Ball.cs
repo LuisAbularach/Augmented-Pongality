@@ -53,7 +53,7 @@ public class Ball : NetworkBehaviour
             // direction = new Vector3(0f, 0f, 1f);
             angle = 90;
 
-            movementSpeed = Mathf.Abs(movementSpeed/movementSpeed);
+            movementSpeed = Mathf.Abs(.2f);
             //inPlay = false;
             transform.position = new Vector3(0, 1, ((P2Back - 1)/2) + 0.5f);
             float randAngle = UnityEngine.Random.Range(10f, 170f);
@@ -66,7 +66,7 @@ public class Ball : NetworkBehaviour
          if (transform.position.z <= P1back) // Enemy Won
         {
             Score.ChangeScore(2);
-            movementSpeed = Mathf.Abs(movementSpeed/movementSpeed);
+            movementSpeed = Mathf.Abs(.2f);
             //inPlay = false;
             transform.position = new Vector3(0, 1, ((P2Back - 1)/2) + 0.5f);
             float randAngle = UnityEngine.Random.Range(10f, 170f);
