@@ -34,7 +34,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         
         public GameObject BallPrefab;
         public GameObject SecondPlayerZone;
-
+        GameObject BallInPlay;
         /// <summary>
         /// The Star model that will represent networked objects in the scene.
         /// </summary>
@@ -44,6 +44,8 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// The Anchor model that will represent the anchor in the scene.
         /// </summary>
         public GameObject AnchorPrefab;
+
+        public GameObject SinglePlayerField;
 
         /// <summary>
         /// The Unity OnStartLocalPlayer() method.
@@ -76,7 +78,20 @@ namespace GoogleARCore.Examples.CloudAnchors
 #pragma warning disable 618
             NetworkServer.Spawn(anchorObject);
 #pragma warning restore 618
+
+        
         }
+
+ #pragma warning disable 618
+        [Command]
+#pragma warning restore 618
+        public void CmdSetProperties(Vector3 NewDirection, float speed)
+        {
+            BallInPlay = GameObject.Find("Ball(Clone)");
+            Debug.Log("LocalPlayer - setting properties");
+            BallInPlay.GetComponent<Ball>().direction = NewDirection;
+            BallInPlay.GetComponent<Ball>().movementSpeed = speed;
+        }   
 
         /// <summary>
         /// A command run on the server that will spawn the Star prefab in all clients.
@@ -111,15 +126,17 @@ namespace GoogleARCore.Examples.CloudAnchors
 #pragma warning disable 618
         [Command]
 #pragma warning restore 618
-        public void CmdSpawnBall(Vector3 position, Quaternion rotation)
+        public void CmdSpawnBall(Vector3 position, Quaternion rotation, float P2backOfField
+        )
         {
             // Instantiate Star model at the hit pose.
-            GameObject ballObject = Instantiate(BallPrefab, new Vector3(0,1.0f,0), rotation);
+            BallInPlay = Instantiate(BallPrefab, new Vector3(0,1.0f,0), rotation);
 
 #pragma warning disable 618
-            NetworkServer.Spawn(ballObject);
+            NetworkServer.Spawn(BallInPlay);
 #pragma warning restore 618
 
+            BallInPlay.GetComponent<Ball>().P2Back = P2backOfField;
         }
 
 #pragma warning disable 618
@@ -130,12 +147,12 @@ namespace GoogleARCore.Examples.CloudAnchors
             //We want the new position aligned with the anchor
             Vector3 position = new Vector3(0,0,distanceTocenter);
 
-            GameObject ballObject = Instantiate(SecondPlayerZone, position, rotation);
+            GameObject PlayerFieldObject = Instantiate(SecondPlayerZone, position, rotation);
 
 #pragma warning disable 618
-            NetworkServer.Spawn(ballObject);
+            NetworkServer.Spawn(PlayerFieldObject);
 #pragma warning restore 618
-
+            
         }
    }
     

@@ -345,6 +345,10 @@ namespace GoogleARCore.Examples.CloudAnchors
             }
         }
 
+        public void _startGame()
+        {
+            CloudAnchorsExampleController.GetComponent<CloudAnchorsExampleController>()._StartGame();
+        }
         private string _GetRoomNumberFromNetworkId(NetworkID networkID)
         {
             return (System.Convert.ToInt64(networkID.ToString()) % 10000).ToString();

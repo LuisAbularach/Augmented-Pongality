@@ -83,3 +83,5 @@ MonoBehaviour:
   StarPrefab: {fileID: 1517545619891756, guid: 12e54071a4b3c764daa4ded6332ecb38, type: 3}
   AnchorPrefab: {fileID: 1517545619891756, guid: b6970d648678ddb498900f7962e14c87,
     type: 3}
+  SinglePlayerField: {fileID: 1256811814440684469, guid: 6d8c070d3ac950541a3a43080f520003,
+    type: 3}

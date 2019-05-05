@@ -25,10 +25,10 @@ namespace GoogleARCore.Examples.CloudAnchors
     using UnityEngine.Networking;
     using UnityEngine.SceneManagement;
 
-// #if UNITY_EDITOR
-//     // Set up touch input propagation while using Instant Preview in the editor.
-//     using Input = InstantPreviewInput;
-//     #endif
+#if UNITY_EDITOR
+    // Set up touch input propagation while using Instant Preview in the editor.
+    using Input = InstantPreviewInput;
+    #endif
 
     /// <summary>
     /// Controller for the Cloud Anchors Example. Handles the ARCore lifecycle.
@@ -36,6 +36,9 @@ namespace GoogleARCore.Examples.CloudAnchors
     public class CloudAnchorsExampleController : MonoBehaviour
     {
         [Header("ARCore")]
+
+        //Button that will appear once the ball is spawned
+        public GameObject StartButton;
     
         //Size data
         bool P2ready;
@@ -43,6 +46,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         float P2front, P2back;
         bool canPlaceWall;
         public GameObject Player2Zone;
+        public GameObject SinglePlayerField;
 
         public GameObject LeftWall,RightWall;
 
@@ -127,6 +131,8 @@ namespace GoogleARCore.Examples.CloudAnchors
         private NetworkManager m_NetworkManager;
 #pragma warning restore 618
 
+        private bool Started;
+
         private bool m_MatchStarted = false;
 
         /// <summary>
@@ -167,6 +173,13 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             _UpdateApplicationLifecycle();
 
+            //Activete button that will start the game if two walls are placed and it has not been activated
+            if(wall_Count == 2 && StartButton.activeSelf == false && m_CurrentMode == ApplicationMode.Hosting && !Started)
+            {
+                Started = true;
+                StartButton.SetActive(true);
+            }
+
             //If not host search for objects
             if(m_CurrentMode != ApplicationMode.Hosting && wall_Count <=2)
             {
@@ -175,6 +188,7 @@ namespace GoogleARCore.Examples.CloudAnchors
                 {
                     P2back = Player2Zone.transform.position.z + 0.5f;
                     Debug.Log("GOT P2Back distance: " + P2back);
+                    //Destroy single player objects
                 }
 
 
@@ -225,13 +239,14 @@ namespace GoogleARCore.Examples.CloudAnchors
             }
 
         //touch
-            if(wall_Count == 2 && SpawnedBall!=null)
-            {
-                SpawnedBall.GetComponent<Ball>().StartBallMovement();
-                SpawnedBall.GetComponent<Ball>().CmdsetP2Back(P2back);
-                if(m_CurrentMode != ApplicationMode.Hosting)
-                    SpawnedBall.GetComponent<Ball>().isP2 = true;
-            }
+            // if(wall_Count == 2 && SpawnedBall!=null)
+            // {
+            //     SpawnedBall.GetComponent<Ball>().StartBallMovement();
+            //     SpawnedBall.GetComponent<Ball>().CmdsetP2Back(P2back);
+            //     if(m_CurrentMode != ApplicationMode.Hosting)
+            //         SpawnedBall.GetComponent<Ball>().isP2 = true;
+                    
+            // }
             TrackableHit arcoreHitResult = new TrackableHit();
             m_LastHitPose = null;
 
@@ -276,6 +291,7 @@ namespace GoogleARCore.Examples.CloudAnchors
                 }
                 else if (!m_IsOriginPlaced && m_CurrentMode == ApplicationMode.Hosting)
                 {
+                    
                     if (Application.platform != RuntimePlatform.IPhonePlayer)
                     {
                         m_WorldOriginAnchor =
@@ -401,6 +417,9 @@ namespace GoogleARCore.Examples.CloudAnchors
             // The anchor will be spawned by the host, so no networking Command is needed.
             GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
                 .SpawnAnchor(Vector3.zero, Quaternion.identity, m_WorldOriginAnchor);
+
+            //Spawn the field for single player
+            //Instantiate(SinglePlayerField, new Vector3(0,0,0.5f),Quaternion.Euler(0,0,0));
         }
 
         /// <summary>
@@ -416,7 +435,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             if(wall_Count==1){
             //Ball
             GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
-                .CmdSpawnBall(m_LastHitPose.Value.position, Quaternion.Euler(0,0,0));
+                .CmdSpawnBall(m_LastHitPose.Value.position, Quaternion.Euler(0,0,0),P2back);
             SpawnedBall = GameObject.Find("Ball(Clone)");
             }
         }
@@ -490,6 +509,17 @@ namespace GoogleARCore.Examples.CloudAnchors
             }
 
             m_WorldOriginAnchor = null;
+        }
+
+        /// <summary>
+        /// Begin the Game and set button inactive again
+        /// </summary>
+        public void _StartGame()
+        {
+            Destroy(StartButton);
+            SpawnedBall.GetComponent<Ball>().StartBallMovement();
+            SpawnedBall.GetComponent<Ball>().CmdsetP2Back(P2back);
+            SpawnedBall.GetComponent<Ball>().isP2 = true;
         }
 
         /// <summary>

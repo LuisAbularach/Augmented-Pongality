@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 5513045103010944008}
   - component: {fileID: 4272055250686566570}
   - component: {fileID: 8694012753585563630}
-  - component: {fileID: 2519020251251209388}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -109,7 +108,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
   inPlay: 0
-  movementSpeed: 0.02
+  movementSpeed: 0.5
   dirx: 0
   diry: 0
   dirz: 0
@@ -149,28 +148,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
---- !u!114 &2519020251251209388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1517545619891756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_TransformSyncMode: 3
-  m_SendInterval: 0.1
-  m_SyncRotationAxis: 7
-  m_RotationSyncCompression: 0
-  m_SyncSpin: 0
-  m_MovementTheshold: 0.001
-  m_VelocityThreshold: 0.0001
-  m_SnapThreshold: 5
-  m_InterpolateRotation: 1
-  m_InterpolateMovement: 1
 --- !u!1 &7958168587696774934
 GameObject:
   m_ObjectHideFlags: 0

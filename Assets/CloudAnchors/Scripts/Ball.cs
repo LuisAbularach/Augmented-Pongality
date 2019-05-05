@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Networking.NetworkSystem;
 
+namespace GoogleARCore.Examples.CloudAnchors{
 public class Ball : NetworkBehaviour
 {
      enum PreviouslyCameFrom {Paddle, LeftWall, RightWall, EnemyPaddle};
@@ -53,7 +54,7 @@ public class Ball : NetworkBehaviour
             // direction = new Vector3(0f, 0f, 1f);
             angle = 90;
 
-            movementSpeed = Mathf.Abs(.2f);
+            movementSpeed = Mathf.Abs(.5f);
             //inPlay = false;
             transform.position = new Vector3(0, 1, ((P2Back - 1)/2) + 0.5f);
             float randAngle = UnityEngine.Random.Range(10f, 170f);
@@ -107,14 +108,7 @@ public class Ball : NetworkBehaviour
         // transform.position += direction * Time.deltaTime * movementSpeed;
         
     }
-#pragma warning disable 618
-        [Command]
-#pragma warning restore 618
-    private void CmdSetProperties(float speed, Vector3 BounceDirection)
-    {
-        movementSpeed = speed;
-        direction = BounceDirection;
-    }
+
 
     private float DegreeToRadian(float angle)
     {
@@ -150,7 +144,7 @@ public class Ball : NetworkBehaviour
             
             Debug.Log("cos x: " + RadianToDegree(x) + "sin z" + RadianToDegree(z));
             if (movementSpeed < 31)
-                movementSpeed += .02f;//(movementSpeed + 1);
+                movementSpeed += 0.5f;//(movementSpeed + 1);
             // keep angle between quadrants III & IV
             if ((paddleYAngle >= 0 && paddleYAngle <= 90) ||
                 (paddleYAngle > 180 && paddleYAngle < 270)){
@@ -173,7 +167,7 @@ public class Ball : NetworkBehaviour
                 }
             }
             Debug.Log("paddle : "+ angle);
-            CmdSetProperties(movementSpeed,new Vector3(x, 0, z));
+            Player.GetComponent<LocalPlayerController>().CmdSetProperties(new Vector3(x, 0, z),movementSpeed);
             PreviousLocation = (int)PreviouslyCameFrom.Paddle;
         }
       
@@ -181,7 +175,7 @@ public class Ball : NetworkBehaviour
         {
             Vector3 vel = direction;
             
-            CmdSetProperties(movementSpeed, new Vector3(vel.x * -1, 0, vel.z));
+            Player.GetComponent<LocalPlayerController>().CmdSetProperties( new Vector3(vel.x * -1, 0, vel.z),movementSpeed);
             
             PreviousLocation = (int)PreviouslyCameFrom.LeftWall;
         }
@@ -190,7 +184,7 @@ public class Ball : NetworkBehaviour
         {
             Vector3 vel = direction;
             
-            CmdSetProperties(movementSpeed,new Vector3(vel.x * -1, 0, vel.z));
+            Player.GetComponent<LocalPlayerController>().CmdSetProperties(new Vector3(vel.x * -1, 0, vel.z),movementSpeed);
 
             PreviousLocation = (int)PreviouslyCameFrom.RightWall;
 
@@ -205,4 +199,5 @@ public class Ball : NetworkBehaviour
     {
         P2Back = back;
     }
+}
 }
