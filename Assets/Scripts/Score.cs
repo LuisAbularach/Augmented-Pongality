@@ -8,7 +8,8 @@ public class Score : MonoBehaviour
     public static int enemyScore;
     // Start is called before the first frame update
 
-    
+    public delegate void ScoreChange(int yourScore,int enemyScore);
+    public static event ScoreChange OnScoreChange;
     void Start()
     {
         yourScore = enemyScore = 0;
@@ -31,6 +32,9 @@ public class Score : MonoBehaviour
             // Debug.Log("Player 2 Enemy won score: " + enemyScore);
             won = 2;
         }
+        if(OnScoreChange!=null)
+            OnScoreChange(yourScore,enemyScore);
+            
         Debug.Log("Player 1 score: " + yourScore);
         Debug.Log("Player 2 Enemy Score: " + enemyScore);
         return won;

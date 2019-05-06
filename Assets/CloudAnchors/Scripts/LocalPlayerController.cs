@@ -47,6 +47,12 @@ namespace GoogleARCore.Examples.CloudAnchors
 
         public GameObject SinglePlayerField;
 
+        private int countWalls = 0;
+        public delegate void ObjectPlaced(string s);
+        public static event ObjectPlaced OnObjectPlaced;
+
+        public delegate void SetUpComplete();
+        public static event SetUpComplete OnSetUpComplete;
         /// <summary>
         /// The Unity OnStartLocalPlayer() method.
         /// </summary>
@@ -113,10 +119,29 @@ namespace GoogleARCore.Examples.CloudAnchors
             //Set wall size (cannot send dynamically sized wall through server)
              if(position.x < 0){
                 Wall.name = "LeftWall";
+                if(OnObjectPlaced != null){
+                    if (countWalls==0){
+                        OnObjectPlaced("Left Wall Placed. Place right side.");
+                    }  
+                    else
+                        OnObjectPlaced("Left Wall Placed. Find the ball, and tap to start");
+                }
             }
             else
             {
                 Wall.name = "RightWall";
+                if(OnObjectPlaced != null){
+                    if (countWalls==0){
+                        OnObjectPlaced("Right Wall Placed. Place left side.");
+                    }  
+                    else
+                        OnObjectPlaced("Right Wall Placed. Find the ball, and tap to start");
+                }
+            }
+            countWalls++; //to check if walls are set
+            if(countWalls == 2){
+                if(OnSetUpComplete!=null)
+                    OnSetUpComplete();
             }
             float x = Wall.transform.localScale.x;
             float y = Wall.transform.localScale.y;
@@ -152,7 +177,8 @@ namespace GoogleARCore.Examples.CloudAnchors
 #pragma warning disable 618
             NetworkServer.Spawn(PlayerFieldObject);
 #pragma warning restore 618
-            
+            if(OnObjectPlaced != null)
+                    OnObjectPlaced("Opponent Placed. Set walls to the left and right");
         }
    }
     
