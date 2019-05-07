@@ -125,8 +125,22 @@ public class BallOld : MonoBehaviour
 
 
             Debug.Log("cos x: " + RadianToDegree(x) + " sin z: " + RadianToDegree(z));
-            if (movementSpeed < maxSpeed)
-                movementSpeed += speedIncrease;
+            // if (movementSpeed >= 0 && movementSpeed < maxSpeed)
+            //     movementSpeed += speedIncrease;
+            // if (movementSpeed < 0 && movementSpeed > maxSpeed * -1)
+            //     movementSpeed -= speedIncrease;
+            if (Mathf.Abs(movementSpeed) < maxSpeed)
+            {
+                float moveSpeed = Mathf.Abs(movementSpeed) + speedIncrease;
+                if (movementSpeed < 0)
+                {
+                    movementSpeed = moveSpeed * -1;
+                }
+                else
+                {
+                    movementSpeed = moveSpeed;
+                }
+            }
             // keep angle between quadrants III & IV
             if ((paddleYAngle >= 0 && paddleYAngle <= 90) ||
                 (paddleYAngle > 180 && paddleYAngle < 270))
