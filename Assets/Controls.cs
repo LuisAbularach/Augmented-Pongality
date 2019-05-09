@@ -26,11 +26,19 @@ public class Controls : MonoBehaviour
         if (Input.GetKey(KeyCode.UpArrow))
         {
             transform.Rotate(Vector3.down, speedRot * Time.deltaTime);
+            float x = Mathf.Cos(DegreeToRadian(transform.rotation.eulerAngles.y));
+            float z = Mathf.Sin(DegreeToRadian(transform.rotation.eulerAngles.y));
+            Debug.Log("ANGLE Y is: " + transform.rotation.eulerAngles.y);
+            Debug.Log("X-COMP: " + x + " Z-COMP: " + z);
         }
 
         if (Input.GetKey(KeyCode.DownArrow))
         {
             transform.Rotate(Vector3.up, speedRot * Time.deltaTime);
+            float x = Mathf.Cos(DegreeToRadian(transform.rotation.eulerAngles.y));
+            float z = Mathf.Sin(DegreeToRadian(transform.rotation.eulerAngles.y));
+            Debug.Log("ANGLE Y is: " + transform.rotation.eulerAngles.y);
+            Debug.Log("X-COMP: " + x + " Z-COMP: " + z);
         }
 
         if (Input.GetKey(KeyCode.RightArrow) && transform.position.x > -8)
@@ -57,5 +65,14 @@ public class Controls : MonoBehaviour
         }
 
 
+    }
+
+     private float DegreeToRadian(float angle)
+    {
+        return Mathf.PI * angle / 180.0f;
+    }
+    private float RadianToDegree(float angle)
+    {
+        return angle * (180.0f / Mathf.PI);
     }
 }
