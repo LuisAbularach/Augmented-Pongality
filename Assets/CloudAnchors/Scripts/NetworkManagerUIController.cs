@@ -121,9 +121,19 @@ namespace GoogleARCore.Examples.CloudAnchors
             ScoreBoardPanel.gameObject.SetActive(true);
             Player1Score.text = "0";
             Player2Score.text = "0";
+            
+
         }
 
         void Score_OnScoreChange(int yourScore, int opponentScore)
+        {
+            Player1Score.text = yourScore.ToString();
+            Player2Score.text = opponentScore.ToString();
+            RpcUpdateClientScore(yourScore, opponentScore);
+
+        }
+        [ClientRpc]
+        public void RpcUpdateClientScore(int yourScore, int opponentScore)
         {
             Player1Score.text = yourScore.ToString();
             Player2Score.text = opponentScore.ToString();

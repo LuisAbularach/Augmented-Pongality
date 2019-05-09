@@ -29,7 +29,7 @@ public class Ball : NetworkBehaviour
     public delegate void SetUpComplete();
     public static event SetUpComplete OnSetUpComplete;
     
-    bool butt = true;
+    bool setUpComplete = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -52,9 +52,10 @@ public class Ball : NetworkBehaviour
     {
 
         //Score
-        if (transform.position.z >=  P2Back)
+        if (transform.position.z >=  P2Back && isServer)
         {
             // transform.position = new Vector3(0f, 3.66f, 0f);
+            
             Score.ChangeScore(1);
             // direction = new Vector3(0f, 0f, 1f);
             angle = 90;
@@ -66,10 +67,10 @@ public class Ball : NetworkBehaviour
             Debug.Log("Winner\'s Random Angle is: " + randAngle);
             float xComp = -1 * Mathf.Cos(DegreeToRadian(randAngle) );
             float zComp = Mathf.Sin(DegreeToRadian(randAngle));
-            if(!isP2)
+            if(isServer)
                 direction = new Vector3(xComp, 0, zComp);
         }
-         if (transform.position.z <= P1back) // Enemy Won
+         if (transform.position.z <= P1back && isServer) // Enemy Won
         {
             Score.ChangeScore(2);
             movementSpeed = Mathf.Abs(.2f);
@@ -81,9 +82,8 @@ public class Ball : NetworkBehaviour
             float zComp = Mathf.Sin(DegreeToRadian(randAngle));
             if (zComp >= 0)
                 zComp *= -1;
-            if(!isP2)
+            if(isServer)
                 direction = new Vector3(xComp, 0, zComp);
-            
                 
         }
         
@@ -94,9 +94,9 @@ public class Ball : NetworkBehaviour
         else
         {
             transform.position += direction * Time.deltaTime * movementSpeed;
-            if(OnSetUpComplete != null && butt)
+            if(OnSetUpComplete != null && setUpComplete)
             {   OnSetUpComplete();
-                butt=false;
+                setUpComplete=false;
             }
             
         }
@@ -181,7 +181,7 @@ public class Ball : NetworkBehaviour
             PreviousLocation = (int)PreviouslyCameFrom.Paddle;
         }
       
-        if (col.gameObject.name == "LeftWall" && !isP2)
+        if (col.gameObject.name == "LeftWall" && isServer)
         {
             Vector3 vel = direction;
             
@@ -190,7 +190,7 @@ public class Ball : NetworkBehaviour
             PreviousLocation = (int)PreviouslyCameFrom.LeftWall;
         }
 
-        if (col.gameObject.name == "RightWall" && !isP2)
+        if (col.gameObject.name == "RightWall" && isServer)
         {
             Vector3 vel = direction;
             

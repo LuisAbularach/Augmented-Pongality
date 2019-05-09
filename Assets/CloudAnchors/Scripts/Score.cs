@@ -10,12 +10,18 @@ public class Score : MonoBehaviour
 
     public delegate void ScoreChange(int yourScore,int enemyScore);
     public static event ScoreChange OnScoreChange;
+    public bool update;
     void Start()
     {
+        update = false;
         yourScore = enemyScore = 0;
     }
 
- 
+    void Update()
+    {
+        if(update)
+            CheckScoreUpdates();
+    }
 
     public static int ChangeScore(int whoWon)
     {
@@ -38,5 +44,12 @@ public class Score : MonoBehaviour
         Debug.Log("Player 1 score: " + yourScore);
         Debug.Log("Player 2 Enemy Score: " + enemyScore);
         return won;
+    }
+
+    public bool CheckScoreUpdates()
+    {
+        //Client needs to check to see if their score is same as host
+
+        return false;
     }
 }
