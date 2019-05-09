@@ -25,7 +25,11 @@ public class Ball : NetworkBehaviour
 
     public float angle;
     public int PreviousLocation;
+
+    public delegate void SetUpComplete();
+    public static event SetUpComplete OnSetUpComplete;
     
+    bool butt = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -46,6 +50,7 @@ public class Ball : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+
         //Score
         if (transform.position.z >=  P2Back)
         {
@@ -88,7 +93,12 @@ public class Ball : NetworkBehaviour
         }
         else
         {
-        transform.position += direction * Time.deltaTime * movementSpeed;
+            transform.position += direction * Time.deltaTime * movementSpeed;
+            if(OnSetUpComplete != null && butt)
+            {   OnSetUpComplete();
+                butt=false;
+            }
+            
         }
 
 

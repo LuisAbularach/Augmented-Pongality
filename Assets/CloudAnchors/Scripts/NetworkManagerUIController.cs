@@ -101,13 +101,13 @@ namespace GoogleARCore.Examples.CloudAnchors
 
         void OnEnable(){
             LocalPlayerController.OnObjectPlaced += LocalPlayerController_OnObjectPlaced;
-            LocalPlayerController.OnSetUpComplete += LocalPlayerController_OnSetUpComplete;
+            Ball.OnSetUpComplete += Ball_OnSetUpComplete;
             Score.OnScoreChange += Score_OnScoreChange;
 
         }
         void OnDisable(){
             LocalPlayerController.OnObjectPlaced -= LocalPlayerController_OnObjectPlaced;
-            LocalPlayerController.OnSetUpComplete -= LocalPlayerController_OnSetUpComplete;
+            Ball.OnSetUpComplete -= Ball_OnSetUpComplete;
             Score.OnScoreChange -= Score_OnScoreChange;
         }
 
@@ -116,7 +116,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             SnackbarText.text = s;
         }
 
-        void LocalPlayerController_OnSetUpComplete()
+        void Ball_OnSetUpComplete()
         {
             ScoreBoardPanel.gameObject.SetActive(true);
             Player1Score.text = "0";
@@ -238,7 +238,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             else
             {
                 SnackbarText.text =
-                    "Cloud Anchor could not be resolved. Will attempt again. " + response;
+                    "Cloud Anchor could not be resolved. Will attempt again." + response;
             }
         }
 
@@ -386,6 +386,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         public void _startGame()
         {
             CloudAnchorsExampleController.GetComponent<CloudAnchorsExampleController>()._StartGame();
+
         }
         private string _GetRoomNumberFromNetworkId(NetworkID networkID)
         {

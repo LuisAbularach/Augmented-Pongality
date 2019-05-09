@@ -51,8 +51,8 @@ namespace GoogleARCore.Examples.CloudAnchors
         public delegate void ObjectPlaced(string s);
         public static event ObjectPlaced OnObjectPlaced;
 
-        public delegate void SetUpComplete();
-        public static event SetUpComplete OnSetUpComplete;
+        //public delegate void SetUpComplete();
+        //public static event SetUpComplete OnSetUpComplete;
         /// <summary>
         /// The Unity OnStartLocalPlayer() method.
         /// </summary>
@@ -138,11 +138,11 @@ namespace GoogleARCore.Examples.CloudAnchors
                         OnObjectPlaced("Right Wall Placed. Find the ball, and tap to start");
                 }
             }
-            countWalls++; //to check if walls are set
-            if(countWalls == 2){
-                if(OnSetUpComplete!=null)
-                    OnSetUpComplete();
-            }
+            //countWalls++; //to check if walls are set
+            //if(countWalls == 2){
+            //    if(OnSetUpComplete!=null)
+            //        OnSetUpComplete();
+            //}
             float x = Wall.transform.localScale.x;
             float y = Wall.transform.localScale.y;
             Wall.transform.localScale = new Vector3(x,y,size);
