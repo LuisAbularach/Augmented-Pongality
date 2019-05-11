@@ -138,7 +138,7 @@ namespace GoogleARCore.Examples.CloudAnchors
                         OnObjectPlaced("Right Wall Placed. Find the ball, and tap to start");
                 }
             }
-            //countWalls++; //to check if walls are set
+            countWalls++; //to check if walls are set
             //if(countWalls == 2){
             //    if(OnSetUpComplete!=null)
             //        OnSetUpComplete();

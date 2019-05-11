@@ -31,6 +31,7 @@ public class Ball : NetworkBehaviour
     public delegate void SetUpComplete();
     public static event SetUpComplete OnSetUpComplete;
     
+    public GameObject Score; // added because removed static from score
     bool setUpComplete = true;
     // Start is called before the first frame update
     void Start()
@@ -43,6 +44,7 @@ public class Ball : NetworkBehaviour
         direction = Vector3.forward;
 //        GameObject.name = "Ball";
         distance = 0.1f;
+        Score = GameObject.Find("Player2Zone(Clone)"); // attached Score.cs to this object
         paddle = GameObject.Find("paddle");
         Player = GameObject.Find("LocalPlayer");
 
@@ -60,7 +62,7 @@ public class Ball : NetworkBehaviour
         {
             // transform.position = new Vector3(0f, 3.66f, 0f);
             
-            Score.ChangeScore(1);
+            Score.GetComponent<Score>().ChangeScore(1);
             // direction = new Vector3(0f, 0f, 1f);
             angle = 90;
 
@@ -76,7 +78,7 @@ public class Ball : NetworkBehaviour
         }
          if (transform.position.z <= P1back && isServer) // Enemy Won
         {
-            Score.ChangeScore(2);
+            Score.GetComponent<Score>().ChangeScore(2);
             movementSpeed = Mathf.Abs(.2f);
             //inPlay = false;
             //transform.position = new Vector3(0, 1, ((P2Back - 1)/2) + 0.5f);
