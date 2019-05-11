@@ -28,14 +28,14 @@ public class BallOld : MonoBehaviour
 
     void Start()
     {
-        
+        Debug.Log("ANGLE IS: "+Vector3.Angle(new Vector3(2,2,0), new Vector3(0, 3, 0)));
         inPlay = false;
         //direction = Vector3.forward;
         fieldLength = field.transform.lossyScale.z;
         Debug.Log("FIELD LENGTH: " + fieldLength);
         wallHeight = wall.transform.lossyScale.y;
         Debug.Log("WALL HEIGHT: " + wallHeight);
-        boundary = (fieldLength / 2) + (fieldLength / 4); 
+        boundary = (fieldLength / 2) + (fieldLength / 4);
         // when ball goes past field length plus and extra 25% of field length, player loses, the 25% accounts for player zone
         Debug.Log("BOUNDARY: " + boundary);
         speedIncrease = fieldLength / 10; // speed of ball will increase by 10% each time it hits the paddle
@@ -52,12 +52,12 @@ public class BallOld : MonoBehaviour
         float ballBound = transform.position.z;
         if (ballBound <= -1 * boundary || ballBound >= boundary)
         {
-            
-            transform.position = new Vector3(0, wallHeight/2, 0); // ball is placed at middle height of the walls
+
+            transform.position = new Vector3(0, wallHeight / 2, 0); // ball is placed at middle height of the walls
             movementSpeed = Math.Abs(movementSpeed);
             inPlay = false;
-            
-            float randAngle = UnityEngine.Random.Range(10f, 170f);
+
+            float randAngle = UnityEngine.Random.Range(65f, 115f);//65f;//UnityEngine.Random.Range(20f, 160f);
             Debug.Log("Winner\'s Random Angle is: " + randAngle);
             float xComp = -1 * Mathf.Cos(DegreeToRadian(randAngle));
             float zComp = Mathf.Sin(DegreeToRadian(randAngle));
@@ -91,7 +91,7 @@ public class BallOld : MonoBehaviour
             Debug.Log("click");
         }
 
-        
+
     }
     private float DegreeToRadian(float angle)
     {
@@ -107,50 +107,86 @@ public class BallOld : MonoBehaviour
             col.gameObject.name != "Opponent Wall") // This takes care of same script being used on different paddles
         {
             Debug.Log("Detected paddle of: " + col.gameObject.name);
-            float paddleYAngle = col.gameObject.transform.rotation.eulerAngles.y; 
+            // float paddleYAngle = col.gameObject.transform.rotation.eulerAngles.y;
+            int paddleYAngle; 
+            float x, z;
+
+            paddleYAngle = Mathf.RoundToInt(col.gameObject.transform.rotation.eulerAngles.y);
+            Debug.Log("paddle Y angle before change is: " + paddleYAngle);
+            if (paddleYAngle == 360)
+                paddleYAngle = 0;
+            if (paddleYAngle < 0)
+                paddleYAngle += 360;
+            x = Mathf.Cos(DegreeToRadian(paddleYAngle));
+            z = Mathf.Sin(DegreeToRadian(paddleYAngle));
+
             // You want the angle of whichever paddle you hit or collided with
             Debug.Log("Euler angle y: " + paddleYAngle);
-
-            float x, z;
-            if (direction.z < 0)
+            if (col.gameObject.transform.position.z >= 0) // Your paddle, quads II and III
             {
-                x = -1 * Mathf.Cos(DegreeToRadian(paddleYAngle) + (Mathf.PI / 2));
-                z = Mathf.Sin(DegreeToRadian(paddleYAngle) + (Mathf.PI / 2));
+                if (paddleYAngle == 0)
+                {
+                    z = -1;
+                    x = 0;
+                }
+                if (paddleYAngle > 0 && paddleYAngle < 90)
+                {
+                    z *= -1;
+                    x *= -1;
+                }
+                if (paddleYAngle == 90)
+                {
+                    z = -1;
+                    x = 0;
+                }
+                if (paddleYAngle > 90  && paddleYAngle < 180)
+                {
+                   Debug.Log("X is: " + x + "Z is neg: " + z);
+                   x *= -1;
+                   z *= -1;
+                }
+                if (paddleYAngle == 180)
+                {
+                    z = -1;
+                    x = 0;
+                }
+                
             }
-            else
+            if (col.gameObject.transform.position.z < 0) // enemy paddle
             {
-                x = -1 * Mathf.Cos(DegreeToRadian(paddleYAngle) + Mathf.PI + (Mathf.PI / 2));
-                z = Mathf.Sin(DegreeToRadian(paddleYAngle) + Mathf.PI + (Mathf.PI / 2));
+                if (paddleYAngle == 0 || paddleYAngle == 90 || paddleYAngle == 180 || paddleYAngle == 270)
+                {
+                    z = 1;
+                    x = 0;
+                }
+                if (paddleYAngle > 180 && paddleYAngle < 270)
+                {
+                    x *= -1;
+                    z *= -1;
+                }
+                if (paddleYAngle > 270 && paddleYAngle < 360)
+                {
+                    x *= -1;
+                    z *= -1;
+                }
             }
-
+           
 
             Debug.Log("cos x: " + RadianToDegree(x) + " sin z: " + RadianToDegree(z));
-            if (movementSpeed < maxSpeed)
-                movementSpeed += speedIncrease;
-            // keep angle between quadrants III & IV
-            if ((paddleYAngle >= 0 && paddleYAngle <= 90) ||
-                (paddleYAngle > 180 && paddleYAngle < 270))
+
+            if (Mathf.Abs(movementSpeed) < maxSpeed)
             {
-                Debug.Log("0 < rotation < 90");
-
-
-                if (paddle.transform.rotation.eulerAngles.y > 180 && paddle.transform.rotation.eulerAngles.y < 270)
+                float moveSpeed = Mathf.Abs(movementSpeed) + speedIncrease;
+                if (movementSpeed < 0)
                 {
-                    Debug.Log("Reverse");
-                    movementSpeed = movementSpeed * -1;
+                    movementSpeed = moveSpeed * -1;
+                }
+                else
+                {
+                    movementSpeed = moveSpeed;
                 }
             }
-
-            else
-            {
-                Debug.Log("-90 < rotation < 0");
-
-                if (paddle.transform.rotation.eulerAngles.y > 90 && paddle.transform.rotation.eulerAngles.y < 180)
-                {
-                    Debug.Log("Reverse");
-                    movementSpeed = movementSpeed * -1;
-                }
-            }
+           
 
             direction = new Vector3(x, 0, z);
 
@@ -183,10 +219,54 @@ public class BallOld : MonoBehaviour
         {
             // x and z axes are concerned
             Vector3 vel = direction;
-            
+
             direction = new Vector3(vel.x, 0, vel.z * -1);
             Debug.Log("Detected Opponent Wall paddle");
 
         }
     }
 }
+
+
+
+
+ // float x, z;
+            // if (direction.z < 0)
+            // {
+            //     x = -1 * Mathf.Cos(DegreeToRadian(paddleYAngle) + (Mathf.PI / 2));
+            //     z = Mathf.Sin(DegreeToRadian(paddleYAngle) + (Mathf.PI / 2));
+            //     if (z < 0)
+            //         z *= -1;
+            // }
+            // else
+            // {
+            //     x = -1 * Mathf.Cos(DegreeToRadian(paddleYAngle) + Mathf.PI + (Mathf.PI / 2));
+            //     z = Mathf.Sin(DegreeToRadian(paddleYAngle) + Mathf.PI + (Mathf.PI / 2));
+            // }
+
+
+
+             // keep angle between quadrants III & IV
+            // if ((paddleYAngle >= 0 && paddleYAngle <= 90) ||
+            //     (paddleYAngle > 180 && paddleYAngle < 270))
+            // {
+            //     Debug.Log("0 < rotation < 90");
+
+
+            //     if (paddle.transform.rotation.eulerAngles.y > 180 && paddle.transform.rotation.eulerAngles.y < 270)
+            //     {
+            //         Debug.Log("Reverse");
+            //         movementSpeed = movementSpeed * -1;
+            //     }
+            // }
+
+            // else
+            // {
+            //     Debug.Log("-90 < rotation < 0");
+
+            //     if (paddle.transform.rotation.eulerAngles.y > 90 && paddle.transform.rotation.eulerAngles.y < 180)
+            //     {
+            //         Debug.Log("Reverse");
+            //         movementSpeed = movementSpeed * -1;
+            //     }
+            // }

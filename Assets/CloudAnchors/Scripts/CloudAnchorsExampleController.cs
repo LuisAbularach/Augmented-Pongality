@@ -243,8 +243,10 @@ namespace GoogleARCore.Examples.CloudAnchors
             // {
             //     SpawnedBall.GetComponent<Ball>().StartBallMovement();
             //     SpawnedBall.GetComponent<Ball>().CmdsetP2Back(P2back);
-                 if(m_CurrentMode != ApplicationMode.Hosting && !SpawnedBall.GetComponent<Ball>().isP2)
+            
+            if(m_CurrentMode != ApplicationMode.Hosting && !SpawnedBall.GetComponent<Ball>().isP2)
                      SpawnedBall.GetComponent<Ball>().isP2 = true;
+
                     
             // }
             TrackableHit arcoreHitResult = new TrackableHit();
