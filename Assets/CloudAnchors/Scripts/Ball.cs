@@ -62,12 +62,12 @@ public class Ball : NetworkBehaviour
 
             movementSpeed = Mathf.Abs(.5f);
             //inPlay = false;
-            transform.position = new Vector3(0, 1, ((P2Back - 1)/2) + 0.5f);
+            //transform.position = new Vector3(0, 1, ((P2Back - 1)/2) + 0.5f);
             float randAngle = UnityEngine.Random.Range(10f, 170f);
             Debug.Log("Winner\'s Random Angle is: " + randAngle);
             float xComp = -1 * Mathf.Cos(DegreeToRadian(randAngle) );
             float zComp = Mathf.Sin(DegreeToRadian(randAngle));
-            if(isServer)
+            //if(isServer)
                 direction = new Vector3(xComp, 0, zComp);
         }
          if (transform.position.z <= P1back && isServer) // Enemy Won
@@ -75,18 +75,25 @@ public class Ball : NetworkBehaviour
             Score.ChangeScore(2);
             movementSpeed = Mathf.Abs(.2f);
             //inPlay = false;
-            transform.position = new Vector3(0, 1, ((P2Back - 1)/2) + 0.5f);
+            //transform.position = new Vector3(0, 1, ((P2Back - 1)/2) + 0.5f);
             float randAngle = UnityEngine.Random.Range(10f, 170f);
             Debug.Log("Winner\'s Random Angle is: " + randAngle);
             float xComp = -1 * Mathf.Cos(DegreeToRadian(randAngle) );
             float zComp = Mathf.Sin(DegreeToRadian(randAngle));
             if (zComp >= 0)
                 zComp *= -1;
-            if(isServer)
+            //if(isServer)
                 direction = new Vector3(xComp, 0, zComp);
                 
         }
-        
+        if (transform.position.z <= P1back && isServer) // Enemy Won
+        {
+            transform.position = new Vector3(0, 1, ((P2Back - 1)/2) + 0.5f);
+        }
+        if (transform.position.z >=  P2Back && isServer)
+        {
+            transform.position = new Vector3(0, 1, ((P2Back - 1)/2) + 0.5f);
+        }
         if (!inPlay) // inPlay == false
         {
             

@@ -33,7 +33,7 @@ namespace GoogleARCore.Examples.CloudAnchors
 #pragma warning disable 618
     [RequireComponent(typeof(NetworkManager))]
 #pragma warning restore 618
-    public class NetworkManagerUIController : MonoBehaviour
+    public class NetworkManagerUIController : NetworkBehaviour
     {
         /// <summary>
         /// The Lobby Screen to see Available Rooms or create a new one.
@@ -138,6 +138,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             Player1Score.text = yourScore.ToString();
             Player2Score.text = opponentScore.ToString();
         }
+        
         /// <summary>
         /// The Unity Awake() method.
         /// </summary>
