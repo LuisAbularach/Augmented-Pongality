@@ -20,11 +20,13 @@ public class Ball : NetworkBehaviour
     bool okay = false;
     float distance;
     public GameObject paddle;
+    public GameObject Camera;
 
     public bool isP2;
 
     public float angle;
     public int PreviousLocation;
+    public bool darkenSet;
 
     public delegate void SetUpComplete();
     public static event SetUpComplete OnSetUpComplete;
@@ -33,6 +35,8 @@ public class Ball : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        isP2 = true;
+        darkenSet = false;
         P1back = -.5f;
         Debug.Log("START BALL!!!");
         inPlay = false;
@@ -42,7 +46,7 @@ public class Ball : NetworkBehaviour
         paddle = GameObject.Find("paddle");
         Player = GameObject.Find("LocalPlayer");
 
-        
+        Camera = GameObject.FindGameObjectWithTag("MainCamera");
         rb = gameObject.GetComponent<Rigidbody>(); 
     }
 
@@ -52,7 +56,7 @@ public class Ball : NetworkBehaviour
     {
 
         //Score
-        if (transform.position.z >=  P2Back && isServer)
+        if (transform.position.z >=  P2Back && !isP2)
         {
             // transform.position = new Vector3(0f, 3.66f, 0f);
             
@@ -62,8 +66,8 @@ public class Ball : NetworkBehaviour
 
             movementSpeed = Mathf.Abs(.5f);
             //inPlay = false;
-            //transform.position = new Vector3(0, 1, ((P2Back - 1)/2) + 0.5f);
-            float randAngle = UnityEngine.Random.Range(10f, 170f);
+            //Create random angle to throw the ball from center
+            float randAngle = UnityEngine.Random.Range(65f, 115f);
             Debug.Log("Winner\'s Random Angle is: " + randAngle);
             float xComp = -1 * Mathf.Cos(DegreeToRadian(randAngle) );
             float zComp = Mathf.Sin(DegreeToRadian(randAngle));
@@ -76,7 +80,7 @@ public class Ball : NetworkBehaviour
             movementSpeed = Mathf.Abs(.2f);
             //inPlay = false;
             //transform.position = new Vector3(0, 1, ((P2Back - 1)/2) + 0.5f);
-            float randAngle = UnityEngine.Random.Range(10f, 170f);
+            float randAngle = UnityEngine.Random.Range(65f, 115f);
             Debug.Log("Winner\'s Random Angle is: " + randAngle);
             float xComp = -1 * Mathf.Cos(DegreeToRadian(randAngle) );
             float zComp = Mathf.Sin(DegreeToRadian(randAngle));
@@ -86,7 +90,7 @@ public class Ball : NetworkBehaviour
                 direction = new Vector3(xComp, 0, zComp);
                 
         }
-        if (transform.position.z <= P1back && isServer) // Enemy Won
+        if (transform.position.z <= P1back && !isP2) // Enemy Won
         {
             transform.position = new Vector3(0, 1, ((P2Back - 1)/2) + 0.5f);
         }
@@ -108,6 +112,14 @@ public class Ball : NetworkBehaviour
             
         }
 
+        //P2 needs to change the values to their field
+        if(isP2&&!darkenSet&&inPlay)
+        {
+            GameObject.Find("DarkenCanvas").SetActive(true);
+            Camera.GetComponent<DarkenAR>().SetPlayer2Field(P2Back - .5f);
+            darkenSet = true;
+        }
+
 
         // }
         if(paddle!=null){
@@ -120,9 +132,14 @@ public class Ball : NetworkBehaviour
         Debug.Log("inPlay: " + inPlay);
         Debug.Log("Start Ball Moving");
         inPlay = true;
+        isP2 = false;
         Debug.Log(inPlay);
 
         // transform.position += direction * Time.deltaTime * movementSpeed;
+
+        //Enable panel to darken screen
+        GameObject.Find("DarkenCanvas").SetActive(true);
+
         
     }
 
@@ -208,10 +225,6 @@ public class Ball : NetworkBehaviour
         }
 
     }
-
-#pragma warning disable 618
-        [Command]
-#pragma warning restore 618
     public void CmdsetP2Back(float back)
     {
         P2Back = back;

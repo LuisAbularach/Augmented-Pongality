@@ -521,7 +521,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             Destroy(StartButton);
             SpawnedBall.GetComponent<Ball>().StartBallMovement();
             SpawnedBall.GetComponent<Ball>().CmdsetP2Back(P2back);
-            //SpawnedBall.GetComponent<Ball>().isP2 = true;
+            SpawnedBall.GetComponent<Ball>().isP2 = false;
         }
 
         /// <summary>
