@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Score : MonoBehaviour
+public class Score : NetworkBehaviour
 {
-    public static int yourScore;
-    public static int enemyScore;
+    [SyncVar]
+    public int yourScore;
+    [SyncVar]
+    public int enemyScore;
     // Start is called before the first frame update
 
     public delegate void ScoreChange(int yourScore,int enemyScore);
@@ -17,13 +20,13 @@ public class Score : MonoBehaviour
         yourScore = enemyScore = 0;
     }
 
-    void Update()
+    /* void Update()
     {
         if(update)
             CheckScoreUpdates();
-    }
+    }*/
 
-    public static int ChangeScore(int whoWon)
+    public int ChangeScore(int whoWon) //removed static
     {
         int won;
         if (whoWon == 1) // you Won
@@ -41,15 +44,17 @@ public class Score : MonoBehaviour
         if(OnScoreChange!=null)
             OnScoreChange(yourScore,enemyScore);
             
+        RpcCheckScoreUpdates();
         Debug.Log("Player 1 score: " + yourScore);
         Debug.Log("Player 2 Enemy Score: " + enemyScore);
         return won;
     }
 
-    public bool CheckScoreUpdates()
+    [ClientRpc]
+    public void RpcCheckScoreUpdates()
     {
         //Client needs to check to see if their score is same as host
-
-        return false;
+        if(OnScoreChange!=null)
+            OnScoreChange(yourScore,enemyScore);
     }
 }

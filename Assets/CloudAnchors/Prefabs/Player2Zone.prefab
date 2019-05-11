@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 114169063702703616}
   - component: {fileID: 1833883365727239855}
   - component: {fileID: 1928036496005468015}
+  - component: {fileID: 1397239913292983252}
   m_Layer: 0
   m_Name: Player2Zone
   m_TagString: Untagged
@@ -92,6 +93,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3d02d0ba953447b8e84daa63111123, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1397239913292983252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1517545619891756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdc158bfcda782344b8b6249d2d3c99a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  update: 0
 --- !u!1 &118857198483551085
 GameObject:
   m_ObjectHideFlags: 0

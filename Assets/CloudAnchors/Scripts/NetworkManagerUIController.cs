@@ -33,7 +33,7 @@ namespace GoogleARCore.Examples.CloudAnchors
 #pragma warning disable 618
     [RequireComponent(typeof(NetworkManager))]
 #pragma warning restore 618
-    public class NetworkManagerUIController : NetworkBehaviour
+    public class NetworkManagerUIController : MonoBehaviour
     {
         /// <summary>
         /// The Lobby Screen to see Available Rooms or create a new one.
@@ -121,20 +121,10 @@ namespace GoogleARCore.Examples.CloudAnchors
             ScoreBoardPanel.gameObject.SetActive(true);
             Player1Score.text = "0";
             Player2Score.text = "0";
-            
-
         }
 
         void Score_OnScoreChange(int yourScore, int opponentScore)
-        {
-            Player1Score.text = yourScore.ToString();
-            Player2Score.text = opponentScore.ToString();
-            RpcUpdateClientScore(yourScore, opponentScore);
-
-        }
-        [ClientRpc]
-        public void RpcUpdateClientScore(int yourScore, int opponentScore)
-        {
+        {          
             Player1Score.text = yourScore.ToString();
             Player2Score.text = opponentScore.ToString();
         }
