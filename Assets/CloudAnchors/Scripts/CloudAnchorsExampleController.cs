@@ -174,7 +174,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             _UpdateApplicationLifecycle();
 
             //Activete button that will start the game if two walls are placed and it has not been activated
-            if(wall_Count == 2 && StartButton.activeSelf == false && m_CurrentMode == ApplicationMode.Hosting && !Started)
+            if(wall_Count == 2 /* && StartButton.activeSelf == false */ && m_CurrentMode == ApplicationMode.Hosting && !Started)
             {
                 Started = true;
                 StartButton.SetActive(true);
@@ -243,8 +243,10 @@ namespace GoogleARCore.Examples.CloudAnchors
             // {
             //     SpawnedBall.GetComponent<Ball>().StartBallMovement();
             //     SpawnedBall.GetComponent<Ball>().CmdsetP2Back(P2back);
-                if(m_CurrentMode != ApplicationMode.Hosting&&!SpawnedBall.GetComponent<Ball>().isP2)
-                    SpawnedBall.GetComponent<Ball>().isP2 = true;
+            
+            if(m_CurrentMode != ApplicationMode.Hosting && !SpawnedBall.GetComponent<Ball>().isP2)
+                     SpawnedBall.GetComponent<Ball>().isP2 = true;
+
                     
             // }
             TrackableHit arcoreHitResult = new TrackableHit();
