@@ -21,6 +21,7 @@ public class Ball : NetworkBehaviour
     float distance;
     public GameObject paddle;
     public GameObject Camera;
+    public GameObject Canvas;
 
     public bool isP2;
 
@@ -45,6 +46,8 @@ public class Ball : NetworkBehaviour
 //        GameObject.name = "Ball";
         distance = 0.1f;
         Score = GameObject.Find("Player2Zone(Clone)"); // attached Score.cs to this object
+        P2Back = Score.transform.position.z + 0.5f;
+
         paddle = GameObject.Find("paddle");
         Player = GameObject.Find("LocalPlayer");
 
@@ -56,9 +59,9 @@ public class Ball : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if(inPlay){
         //Score
-        if (transform.position.z >=  P2Back && !isP2)
+        if (transform.position.z <=  P2Back + 0.2f && !isP2)
         {
             // transform.position = new Vector3(0f, 3.66f, 0f);
             
@@ -76,7 +79,9 @@ public class Ball : NetworkBehaviour
             //if(isServer)
                 direction = new Vector3(xComp, 0, zComp);
         }
-         if (transform.position.z <= P1back && isServer) // Enemy Won
+
+
+        if (transform.position.z >= -0.7f && isServer) // Enemy Won
         {
             Score.GetComponent<Score>().ChangeScore(2);
             movementSpeed = Mathf.Abs(.2f);
@@ -92,25 +97,22 @@ public class Ball : NetworkBehaviour
                 direction = new Vector3(xComp, 0, zComp);
                 
         }
-        if (transform.position.z <= P1back && !isP2) // Enemy Won
+
+
+        if (transform.position.z <=  P2Back + 0.2f && !isP2) 
         {
             transform.position = new Vector3(0, 1, ((P2Back - 1)/2) + 0.5f);
         }
-        if (transform.position.z >=  P2Back && isServer)
+        if (transform.position.z >= -0.7f  && !isP2)
         {
             transform.position = new Vector3(0, 1, ((P2Back - 1)/2) + 0.5f);
         }
-        if (!inPlay) // inPlay == false
-        {
-            
+
+        transform.position += direction * Time.deltaTime * movementSpeed;
+        if(OnSetUpComplete != null && setUpComplete)
+        {   OnSetUpComplete();
+            setUpComplete=false;
         }
-        else
-        {
-            transform.position += direction * Time.deltaTime * movementSpeed;
-            if(OnSetUpComplete != null && setUpComplete)
-            {   OnSetUpComplete();
-                setUpComplete=false;
-            }
             
         }
 
@@ -140,7 +142,8 @@ public class Ball : NetworkBehaviour
         // transform.position += direction * Time.deltaTime * movementSpeed;
 
         //Enable panel to darken screen
-        GameObject.Find("DarkenCanvas").SetActive(true);
+        Canvas = GameObject.Find("DarkenCanvas");
+        Canvas.SetActive(true);
 
         
     }
@@ -158,6 +161,10 @@ public class Ball : NetworkBehaviour
 
     void OnCollisionEnter(Collision col)
     {
+        //When colides on server we sync position of host to client
+        // if(!isP2)
+        //     transform.position = transform.position;
+
         Debug.Log(col.gameObject.name);
           if (col.gameObject.name == "paddle")
         {
