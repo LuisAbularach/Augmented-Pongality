@@ -124,7 +124,7 @@ namespace GoogleARCore.Examples.CloudAnchors
                         OnObjectPlaced("Left Wall Placed. Place right side.");
                     }  
                     else
-                        OnObjectPlaced("Left Wall Placed. Find the ball, and tap to start");
+                        OnObjectPlaced("Left Wall Placed. Find the ball, and tap start button");
                 }
             }
             else
@@ -135,7 +135,7 @@ namespace GoogleARCore.Examples.CloudAnchors
                         OnObjectPlaced("Right Wall Placed. Place left side.");
                     }  
                     else
-                        OnObjectPlaced("Right Wall Placed. Find the ball, and tap to start");
+                        OnObjectPlaced("Right Wall Placed. Find the ball, and tap start button");
                 }
             }
             countWalls++; //to check if walls are set

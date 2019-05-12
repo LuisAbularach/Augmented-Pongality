@@ -135,6 +135,7 @@ namespace GoogleARCore.Examples.CloudAnchors
 
         private bool m_MatchStarted = false;
 
+
         /// <summary>
         /// Enumerates modes the example application can be in.
         /// </summary>
@@ -178,6 +179,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             {
                 Started = true;
                 StartButton.SetActive(true);
+                
             }
 
             //If not host search for objects
@@ -520,7 +522,9 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             Destroy(StartButton);
             SpawnedBall.GetComponent<Ball>().StartBallMovement();
-            SpawnedBall.GetComponent<Ball>().CmdsetP2Back(P2back);
+            //SpawnedBall.GetComponent<Ball>().CmdsetP2Back(P2back);
+
+            SpawnedBall.GetComponent<Ball>().RpcRemoveSnackbar();
             //SpawnedBall.GetComponent<Ball>().isP2 = false;
         }
 

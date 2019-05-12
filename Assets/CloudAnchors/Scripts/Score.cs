@@ -5,15 +5,16 @@ using UnityEngine.Networking;
 
 public class Score : NetworkBehaviour
 {
-    [SyncVar]
+    //[SyncVar]
     public int yourScore;
-    [SyncVar]
+    //[SyncVar]
     public int enemyScore;
     // Start is called before the first frame update
 
     public delegate void ScoreChange(int yourScore,int enemyScore);
     public static event ScoreChange OnScoreChange;
     public bool update;
+
     void Start()
     {
         update = false;
@@ -44,17 +45,17 @@ public class Score : NetworkBehaviour
         if(OnScoreChange!=null)
             OnScoreChange(yourScore,enemyScore);
             
-        RpcCheckScoreUpdates();
+        RpcCheckScoreUpdates(yourScore,enemyScore);
         Debug.Log("Player 1 score: " + yourScore);
         Debug.Log("Player 2 Enemy Score: " + enemyScore);
         return won;
     }
 
     [ClientRpc]
-    public void RpcCheckScoreUpdates()
+    public void RpcCheckScoreUpdates(int enScore, int yoScore)
     {
         //Client needs to check to see if their score is same as host
         if(OnScoreChange!=null)
-            OnScoreChange(yourScore,enemyScore);
+            OnScoreChange(yoScore,enScore);
     }
 }

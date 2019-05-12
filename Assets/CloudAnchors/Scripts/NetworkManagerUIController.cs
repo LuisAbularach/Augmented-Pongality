@@ -103,7 +103,6 @@ namespace GoogleARCore.Examples.CloudAnchors
             LocalPlayerController.OnObjectPlaced += LocalPlayerController_OnObjectPlaced;
             Ball.OnSetUpComplete += Ball_OnSetUpComplete;
             Score.OnScoreChange += Score_OnScoreChange;
-
         }
         void OnDisable(){
             LocalPlayerController.OnObjectPlaced -= LocalPlayerController_OnObjectPlaced;
@@ -128,6 +127,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             Player1Score.text = yourScore.ToString();
             Player2Score.text = opponentScore.ToString();
         }
+
         
         /// <summary>
         /// The Unity Awake() method.
@@ -387,11 +387,16 @@ namespace GoogleARCore.Examples.CloudAnchors
         public void _startGame()
         {
             CloudAnchorsExampleController.GetComponent<CloudAnchorsExampleController>()._StartGame();
-
+            RemoveSnackbar();
         }
         private string _GetRoomNumberFromNetworkId(NetworkID networkID)
         {
             return (System.Convert.ToInt64(networkID.ToString()) % 10000).ToString();
+        }
+
+        public void RemoveSnackbar()
+        {
+            SnackbarText.transform.parent.gameObject.SetActive(false);
         }
     }
 }
