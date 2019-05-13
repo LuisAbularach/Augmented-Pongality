@@ -32,13 +32,13 @@ public class Score : NetworkBehaviour
         int won;
         if (whoWon == 1) // you Won
         {
-            yourScore++;
+            enemyScore++;
             // Debug.Log("Player 1 score: " + yourScore);
             won = 1;
         }
         else  // enemy won
         {
-            enemyScore++;
+            yourScore++;
             // Debug.Log("Player 2 Enemy won score: " + enemyScore);
             won = 2;
         }

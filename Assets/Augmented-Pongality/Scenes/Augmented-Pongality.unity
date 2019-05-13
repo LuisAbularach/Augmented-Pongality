@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4366757, g: 0.48427194, b: 0.5645252, a: 1}
+  m_IndirectSpecularColor: {r: 0.43667588, g: 0.48427194, b: 0.564524, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -801,7 +801,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 60
+    m_FontSize: 100
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -837,8 +837,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 202}
-  m_SizeDelta: {x: 160, y: 150}
+  m_AnchoredPosition: {x: 0, y: 162}
+  m_SizeDelta: {x: 500, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &194298517
 GameObject:
@@ -876,12 +876,12 @@ RectTransform:
   - {fileID: 1668928966}
   - {fileID: 598336148}
   - {fileID: 1821425856}
-  m_Father: {fileID: 2138016334}
-  m_RootOrder: 5
+  m_Father: {fileID: 589716848}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -62.000732}
+  m_AnchoredPosition: {x: 0, y: -62}
   m_SizeDelta: {x: -328, y: -1116}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &194298519
@@ -1407,7 +1407,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -230.00049, y: -99.99999}
+  m_AnchoredPosition: {x: -230, y: -100}
   m_SizeDelta: {x: -459.99994, y: -200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &378851855
@@ -1606,11 +1606,11 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 60
+    m_FontSize: 100
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 6
-    m_MaxSize: 60
+    m_MinSize: 1
+    m_MaxSize: 100
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -1642,8 +1642,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 208}
-  m_SizeDelta: {x: 160, y: 150}
+  m_AnchoredPosition: {x: 0, y: 161}
+  m_SizeDelta: {x: 500, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &452127689
 GameObject:
@@ -1886,6 +1886,7 @@ RectTransform:
   - {fileID: 364426701}
   - {fileID: 624944429}
   - {fileID: 1911780924}
+  - {fileID: 194298518}
   m_Father: {fileID: 1184477164}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1941,7 +1942,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -283.99997}
+  m_AnchoredPosition: {x: 0, y: -232}
   m_SizeDelta: {x: 1200, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &598336149
@@ -2885,6 +2886,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SPF: {fileID: 7076532784109209802, guid: 0b49996377dc8f34ab0aad3884708168, type: 3}
   BallObject: {fileID: 1517545619891756, guid: 5692ceb69bfb152469a4f6d2b1b82ace, type: 3}
+  ARplains: {fileID: 0}
   LobbyScreen: {fileID: 1184477165}
   SnackbarText: {fileID: 452127690}
   CurrentRoomLabel: {fileID: 140788285}
@@ -4343,7 +4345,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 272.00006}
+  m_AnchoredPosition: {x: 0, y: 102}
   m_SizeDelta: {x: 800, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1671322866
@@ -4848,7 +4850,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -174}
+  m_AnchoredPosition: {x: 0, y: -287}
   m_SizeDelta: {x: 800, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1821425857
@@ -5456,7 +5458,6 @@ RectTransform:
   - {fileID: 67495580}
   - {fileID: 318443684}
   - {fileID: 1441091338}
-  - {fileID: 194298518}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
