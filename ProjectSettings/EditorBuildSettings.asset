@@ -8,7 +8,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 9a35f4351cfabd44692f1c963e24b9d0
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/PongScene.unity
     guid: 480df26a03ae4694ca44132fa120cce7
+  - enabled: 1
+    path: Assets/CloudAnchors/Scenes/Augmented-Pongality.unity
+    guid: 83fb41cc294e74bdea57537befa00ffc
+  - enabled: 0
+    path: Assets/GoogleARCore/Examples/ObjectManipulation/Scenes/ObjectManipulation.unity
+    guid: 9dba7e74f4d2b410f90b920f80528d44
   m_configObjects: {}
