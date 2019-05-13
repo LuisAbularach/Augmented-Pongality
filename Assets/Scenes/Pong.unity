@@ -325,7 +325,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &374195367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -754,7 +754,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &810950562
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1495,6 +1495,7 @@ MonoBehaviour:
   darkCube: {fileID: 1541568163}
   yourPanel: {fileID: 179630218}
   enemyPanel: {fileID: 1336473713}
+  fieldWidth: 0
 --- !u!1 &1745674977
 GameObject:
   m_ObjectHideFlags: 0
@@ -1612,6 +1613,7 @@ MonoBehaviour:
   darkCube: {fileID: 1541568163}
   yourPanel: {fileID: 179630218}
   enemyPanel: {fileID: 1336473713}
+  fieldWidth: 0
 --- !u!1001 &1925771436248326736
 PrefabInstance:
   m_ObjectHideFlags: 0

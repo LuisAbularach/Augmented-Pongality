@@ -43,7 +43,7 @@ public class Darken : MonoBehaviour
     public GameObject darkCube;
     public GameObject yourPanel;
     public GameObject enemyPanel;
-
+    public float fieldWidth;
     // Start is called before the first frame update
     void Start()
     {
@@ -51,7 +51,9 @@ public class Darken : MonoBehaviour
 
         uiElement.alpha = 0;
         origPaddlePos = gameObject.transform.parent.transform.position.z;
-        fieldBound = field.transform.lossyScale.z;
+        fieldBound = field.transform.lossyScale.z; // length of field
+        fieldWidth = field.transform.lossyScale.x;  // width of field
+        darkCube.transform.localScale = new Vector3(fieldWidth * 2, fieldBound * 2, 0.1f);
         playerArea = fieldBound / 10;
         // player area will start at edge of field plus 10% of field length, use z key to go forward, use s to go backward
         paddleOutsideOfArea = false;
@@ -128,8 +130,8 @@ public class Darken : MonoBehaviour
                     countDownText.SetActive(true);
                     darkCube.SetActive(true);
                     float darkCubePos = transform.parent.position.z;
-                    
-                    darkCube.transform.position = new Vector3(0, 4, darkCubePos);
+                    // 0
+                    darkCube.transform.position = new Vector3(transform.parent.position.x, 4, darkCubePos);
                     yourPanel.SetActive(false);
 
                 }
@@ -137,8 +139,8 @@ public class Darken : MonoBehaviour
                 {
                     float darkCubePos = transform.parent.position.z;
                     
-                    
-                    darkCube.transform.position = new Vector3(0, 4, darkCubePos);
+                    // 0
+                    darkCube.transform.position = new Vector3(transform.parent.position.x, 4, darkCubePos);
                     darkCube.transform.rotation = transform.parent.rotation;
                 }
                 if (startCountingDown && currentTimeLeft > 0)
@@ -203,7 +205,7 @@ public class Darken : MonoBehaviour
 
                    
 
-                    darkCube.transform.position = new Vector3(0, 4, darkCubePos);
+                    darkCube.transform.position = new Vector3(transform.parent.position.x, 4, darkCubePos);
                     darkCube.transform.rotation = transform.parent.rotation;
                     
                     enemyPanel.SetActive(false);
@@ -213,7 +215,7 @@ public class Darken : MonoBehaviour
                     float darkCubePos = transform.parent.position.z;
                     
                     
-                    darkCube.transform.position = new Vector3(0, 4, darkCubePos);
+                    darkCube.transform.position = new Vector3(transform.parent.position.x, 4, darkCubePos);
                     darkCube.transform.rotation = transform.parent.rotation;
                 }
 
