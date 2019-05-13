@@ -51,6 +51,14 @@ public class Score : NetworkBehaviour
         return won;
     }
 
+    public void ResetScore()
+    {
+        yourScore = 0;
+        enemyScore = 0;
+        OnScoreChange(yourScore,enemyScore);
+        RpcCheckScoreUpdates(yourScore,enemyScore);
+    }
+
     [ClientRpc]
     public void RpcCheckScoreUpdates(int enScore, int yoScore)
     {

@@ -38,17 +38,20 @@ namespace GoogleARCore.Examples.CloudAnchors
         [Header("ARCore")]
 
         //Button that will appear once the ball is spawned
-        public GameObject StartButton;
+        public GameObject StartButton, SinglePlayerButton;
     
         //Size data
         bool P2ready;
         //These are references to the back and fronts of the player fields
         float P2front, P2back;
+        public bool isPlacingP2Field;
         bool canPlaceWall;
         public GameObject Player2Zone;
         public GameObject SinglePlayerField;
 
         public GameObject LeftWall,RightWall;
+
+        public GameObject SPF;
 
         public GameObject SpawnedBall;
         /// <summary>
@@ -164,6 +167,9 @@ namespace GoogleARCore.Examples.CloudAnchors
             ARCoreRoot.SetActive(false);
             ARKitRoot.SetActive(false);
             _ResetStatus();
+
+            
+
         }
         //***********************************************************************************************//
         /// <summary>
@@ -172,6 +178,12 @@ namespace GoogleARCore.Examples.CloudAnchors
         //***********************************************************************************************//
         public void Update()
         {
+
+            //Client can place their own field
+            if(m_CurrentMode != ApplicationMode.Hosting &&  GameObject.FindGameObjectsWithTag("wall").Length == 0 && isPlacingP2Field)
+            {
+               isPlacingP2Field = true;
+            }
             _UpdateApplicationLifecycle();
 
             //Activete button that will start the game if two walls are placed and it has not been activated
@@ -274,7 +286,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             }
 
             // If there was an anchor placed, then instantiate the corresponding object.
-            if (m_LastHitPose != null && m_CurrentMode == ApplicationMode.Hosting)
+            if (m_LastHitPose != null && (m_CurrentMode == ApplicationMode.Hosting || isPlacingP2Field))
             {                
                 // The first touch on the Hosting mode will instantiate the origin anchor (p1 field). Any
                 // subsequent touch will instantiate a wall, both in Hosting and Resolving modes.
@@ -286,6 +298,7 @@ namespace GoogleARCore.Examples.CloudAnchors
                     {
                         Debug.Log("Place the field for P2");
                         _InstantiatePlayer2Zone();  
+                        isPlacingP2Field = false;
                     }
                     else{
                         _InstantiateWall();
@@ -387,6 +400,9 @@ namespace GoogleARCore.Examples.CloudAnchors
 
             m_AnchorAlreadyInstantiated = true;
             UIController.OnAnchorInstantiated(isHost);
+
+            //Button for single player appears
+            // SinglePlayerButton.SetActive(true);
         }
 
         /// <summary>
@@ -446,6 +462,11 @@ namespace GoogleARCore.Examples.CloudAnchors
 
         private void _InstantiatePlayer2Zone()
         {
+            //if button or single player field is active destroy
+            GameObject.Destroy(SinglePlayerButton);
+            GameObject.Destroy(SPF);
+            GameObject.Destroy(SpawnedBall);
+            
             Vector3 P2 = m_LastHitPose.Value.position;
             //Check to see if z position is at least half a meter away from p1
             //if(P2.z - 0.5f >= 0.0f){
@@ -520,8 +541,8 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// </summary>
         public void _StartGame()
         {
-            Destroy(StartButton);
-            SpawnedBall.GetComponent<Ball>().StartBallMovement();
+            
+            SpawnedBall.GetComponent<Ball>().StartBallMovement(StartButton);
             //SpawnedBall.GetComponent<Ball>().CmdsetP2Back(P2back);
 
             SpawnedBall.GetComponent<Ball>().RpcRemoveSnackbar();
