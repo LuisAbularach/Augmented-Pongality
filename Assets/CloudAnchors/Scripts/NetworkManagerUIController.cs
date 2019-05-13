@@ -93,6 +93,43 @@ namespace GoogleARCore.Examples.CloudAnchors
         private List<GameObject> m_JoinRoomButtonsPool = new List<GameObject>();
 
         /// <summary>
+        /// Keep score of each user.
+        /// </summary>
+        public RectTransform ScoreBoardPanel;
+        public Text Player1Score; //server
+        public Text Player2Score; //client
+
+        void OnEnable(){
+            LocalPlayerController.OnObjectPlaced += LocalPlayerController_OnObjectPlaced;
+            Ball.OnSetUpComplete += Ball_OnSetUpComplete;
+            Score.OnScoreChange += Score_OnScoreChange;
+        }
+        void OnDisable(){
+            LocalPlayerController.OnObjectPlaced -= LocalPlayerController_OnObjectPlaced;
+            Ball.OnSetUpComplete -= Ball_OnSetUpComplete;
+            Score.OnScoreChange -= Score_OnScoreChange;
+        }
+
+        void LocalPlayerController_OnObjectPlaced(string s)
+        {
+            SnackbarText.text = s;
+        }
+
+        void Ball_OnSetUpComplete()
+        {
+            ScoreBoardPanel.gameObject.SetActive(true);
+            Player1Score.text = "0";
+            Player2Score.text = "0";
+        }
+
+        void Score_OnScoreChange(int yourScore, int opponentScore)
+        {          
+            Player1Score.text = yourScore.ToString();
+            Player2Score.text = opponentScore.ToString();
+        }
+
+        
+        /// <summary>
         /// The Unity Awake() method.
         /// </summary>
         public void Awake()
@@ -122,6 +159,8 @@ namespace GoogleARCore.Examples.CloudAnchors
                 requestDomain: 0,
                 callback: _OnMatchList);
             _ChangeLobbyUIVisibility(true);
+            
+            ScoreBoardPanel.gameObject.SetActive(false); //hide scoreboard at start
         }
 
         /// <summary>
@@ -158,7 +197,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             if (isHost)
             {
-                SnackbarText.text = "Hosting Cloud Anchor...";
+                SnackbarText.text = "Hosting Cloud Anchor. Please wait.";
             }
             else
             {
@@ -177,7 +216,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             if (success)
             {
-                SnackbarText.text = "Cloud Anchor successfully hosted! Tap to place the walls.";
+                SnackbarText.text = "Cloud Anchor successfully hosted! Have your friend join. Then tap to place your opponent's space.";
             }
             else
             {
@@ -195,12 +234,12 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             if (success)
             {
-                SnackbarText.text = "Cloud Anchor successfully resolved! Tap to place the walls.";
+                SnackbarText.text = "Cloud Anchor successfully resolved!";//tap to place walls
             }
             else
             {
                 SnackbarText.text =
-                    "Cloud Anchor could not be resolved. Will attempt again. " + response;
+                    "Cloud Anchor could not be resolved. Will attempt again." + response;
             }
         }
 
@@ -348,10 +387,16 @@ namespace GoogleARCore.Examples.CloudAnchors
         public void _startGame()
         {
             CloudAnchorsExampleController.GetComponent<CloudAnchorsExampleController>()._StartGame();
+            RemoveSnackbar();
         }
         private string _GetRoomNumberFromNetworkId(NetworkID networkID)
         {
             return (System.Convert.ToInt64(networkID.ToString()) % 10000).ToString();
+        }
+
+        public void RemoveSnackbar()
+        {
+            SnackbarText.transform.parent.gameObject.SetActive(false);
         }
     }
 }

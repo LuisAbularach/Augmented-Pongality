@@ -16,7 +16,7 @@ public class BallOld : MonoBehaviour
     public GameObject field; // get the length of field from transform's scale
     public GameObject paddle;
     public GameObject wall; // assumes left wall & right wall are both the same height
-
+    public GameObject Score; //added by mo
     public float fieldLength;
     public float wallHeight;
 
@@ -44,6 +44,7 @@ public class BallOld : MonoBehaviour
         Debug.Log("Max speed is: " + maxSpeed);
         direction = new Vector3(0, 0, speedIncrease);
         movementSpeed = speedIncrease;
+        Score = GameObject.Find("Player2Zone");//added by mo
     }
     // Update is called once per frame
     void Update()
@@ -63,13 +64,15 @@ public class BallOld : MonoBehaviour
             float zComp = Mathf.Sin(DegreeToRadian(randAngle));
             if (ballBound >= boundary)  // Enemy won
             {
-                Score.ChangeScore(2);
+                //Score.ChangeScore(2); //dont forget to fix this
+                Score.GetComponent<Score>().ChangeScore(2); // added by mo
                 if (zComp >= 0)
                     zComp *= -1;
             }
             else  // You won
             {
-                Score.ChangeScore(1);
+                //Score.ChangeScore(1); //dont forget to fix this
+                Score.GetComponent<Score>().ChangeScore(1); // added by mo
             }
 
             direction = new Vector3(xComp, 0, zComp);

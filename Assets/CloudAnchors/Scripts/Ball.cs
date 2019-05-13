@@ -20,25 +20,39 @@ public class Ball : NetworkBehaviour
     bool okay = false;
     float distance;
     public GameObject paddle;
+    public GameObject Camera;
+    public GameObject Canvas;
+    public GameObject _net_manager;
 
     public bool isP2;
 
     public float angle;
     public int PreviousLocation;
+    public bool darkenSet;
+
+    public delegate void SetUpComplete();
+    public static event SetUpComplete OnSetUpComplete;
     
+    public GameObject Score; // added because removed static from score
+    bool setUpComplete = true;
     // Start is called before the first frame update
     void Start()
     {
+        isP2 = true;
+        darkenSet = false;
         P1back = -.5f;
         Debug.Log("START BALL!!!");
         inPlay = false;
         direction = Vector3.forward;
 //        GameObject.name = "Ball";
         distance = 0.1f;
+        Score = GameObject.Find("Player2Zone(Clone)"); // attached Score.cs to this object
+        P2Back = Score.transform.position.z + 0.5f;
+
         paddle = GameObject.Find("paddle");
         Player = GameObject.Find("LocalPlayer");
 
-        
+        Camera = GameObject.FindGameObjectWithTag("MainCamera");
         rb = gameObject.GetComponent<Rigidbody>(); 
     }
 
@@ -46,49 +60,71 @@ public class Ball : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Score
-        if (transform.position.z >=  P2Back)
-        {
-            // transform.position = new Vector3(0f, 3.66f, 0f);
-            Score.ChangeScore(1);
-            // direction = new Vector3(0f, 0f, 1f);
-            angle = 90;
-
-            movementSpeed = Mathf.Abs(.5f);
-            //inPlay = false;
-            transform.position = new Vector3(0, 1, ((P2Back - 1)/2) + 0.5f);
-            float randAngle = UnityEngine.Random.Range(10f, 170f);
-            Debug.Log("Winner\'s Random Angle is: " + randAngle);
-            float xComp = -1 * Mathf.Cos(DegreeToRadian(randAngle) );
-            float zComp = Mathf.Sin(DegreeToRadian(randAngle));
-            if(!isP2)
-                direction = new Vector3(xComp, 0, zComp);
-        }
-         if (transform.position.z <= P1back) // Enemy Won
-        {
-            Score.ChangeScore(2);
-            movementSpeed = Mathf.Abs(.2f);
-            //inPlay = false;
-            transform.position = new Vector3(0, 1, ((P2Back - 1)/2) + 0.5f);
-            float randAngle = UnityEngine.Random.Range(10f, 170f);
-            Debug.Log("Winner\'s Random Angle is: " + randAngle);
-            float xComp = -1 * Mathf.Cos(DegreeToRadian(randAngle) );
-            float zComp = Mathf.Sin(DegreeToRadian(randAngle));
-            if (zComp >= 0)
-                zComp *= -1;
-            if(!isP2)
-                direction = new Vector3(xComp, 0, zComp);
-            
+        if(inPlay){
+            //Score
+            if (transform.position.z >=  P2Back)
+            {
+                // transform.position = new Vector3(0f, 3.66f, 0f);
+                if(!isP2)
+                    Score.GetComponent<Score>().ChangeScore(1);
                 
-        }
-        
-        if (!inPlay) // inPlay == false
-        {
+                // direction = new Vector3(0f, 0f, 1f);
+                angle = 90;
+
+                movementSpeed = Mathf.Abs(.5f);
+                //inPlay = false;
+                //Create random angle to throw the ball from center
+                float randAngle = UnityEngine.Random.Range(65f, 115f);
+                Debug.Log("Winner\'s Random Angle is: " + randAngle);
+                float xComp = -1 * Mathf.Cos(DegreeToRadian(randAngle) );
+                float zComp = Mathf.Sin(DegreeToRadian(randAngle));
+                if(!isP2)
+                    direction = new Vector3(xComp, 0, zComp);
+            }
+
+
+            if (transform.position.z <= -0.5f) // Enemy Won
+            {
+                Score.GetComponent<Score>().ChangeScore(2);
+                movementSpeed = Mathf.Abs(.2f);
+                //inPlay = false;
+                //transform.position = new Vector3(0, 1, ((P2Back - 1)/2) + 0.5f);
+                float randAngle = UnityEngine.Random.Range(65f, 115f);
+                Debug.Log("Winner\'s Random Angle is: " + randAngle);
+                float xComp = -1 * Mathf.Cos(DegreeToRadian(randAngle) );
+                float zComp = Mathf.Sin(DegreeToRadian(randAngle));
+                if (zComp >= 0)
+                    zComp *= -1;
+                //if(isServer)
+                    direction = new Vector3(xComp, 0, zComp);
+                    
+            }
+
+
+            if (transform.position.z >=  P2Back) 
+            {
+                transform.position = new Vector3(0, 1, ((P2Back - 1)/2) + 0.5f);
+
+            }
+            if (transform.position.z <= -0.5f)
+            {
+                transform.position = new Vector3(0, 1, ((P2Back - 1)/2) + 0.5f);
+            }
+
+            transform.position += direction * Time.deltaTime * movementSpeed;
+            if(OnSetUpComplete != null && setUpComplete)
+            {   OnSetUpComplete();
+                setUpComplete=false;
+            }
             
         }
-        else
+
+        //P2 needs to change the values to their field
+        if(isP2&&!darkenSet&&inPlay)
         {
-        transform.position += direction * Time.deltaTime * movementSpeed;
+            GameObject.Find("DarkenCanvas").SetActive(true);
+            Camera.GetComponent<DarkenAR>().SetPlayer2Field(P2Back - .5f);
+            darkenSet = true;
         }
 
 
@@ -103,9 +139,15 @@ public class Ball : NetworkBehaviour
         Debug.Log("inPlay: " + inPlay);
         Debug.Log("Start Ball Moving");
         inPlay = true;
+        isP2 = false;
         Debug.Log(inPlay);
 
         // transform.position += direction * Time.deltaTime * movementSpeed;
+
+        //Enable panel to darken screen
+        Canvas = GameObject.Find("DarkenCanvas");
+        //Canvas.SetActive(true);
+
         
     }
 
@@ -122,6 +164,10 @@ public class Ball : NetworkBehaviour
 
     void OnCollisionEnter(Collision col)
     {
+        //When colides on server we sync position of host to client
+        // if(!isP2)
+        //     transform.position = transform.position;
+
         Debug.Log(col.gameObject.name);
           if (col.gameObject.name == "paddle")
         {
@@ -171,7 +217,7 @@ public class Ball : NetworkBehaviour
             PreviousLocation = (int)PreviouslyCameFrom.Paddle;
         }
       
-        if (col.gameObject.name == "LeftWall" && !isP2)
+        if (col.gameObject.name == "LeftWall" && isServer)
         {
             Vector3 vel = direction;
             
@@ -180,7 +226,7 @@ public class Ball : NetworkBehaviour
             PreviousLocation = (int)PreviouslyCameFrom.LeftWall;
         }
 
-        if (col.gameObject.name == "RightWall" && !isP2)
+        if (col.gameObject.name == "RightWall" && isServer)
         {
             Vector3 vel = direction;
             
@@ -191,13 +237,16 @@ public class Ball : NetworkBehaviour
         }
 
     }
-
-#pragma warning disable 618
-        [Command]
-#pragma warning restore 618
     public void CmdsetP2Back(float back)
     {
         P2Back = back;
+    }
+
+    [ClientRpc]
+    public void RpcRemoveSnackbar()
+    {
+        _net_manager = GameObject.Find("Network Manager");
+        _net_manager.GetComponent<NetworkManagerUIController>().RemoveSnackbar();
     }
 }
 }

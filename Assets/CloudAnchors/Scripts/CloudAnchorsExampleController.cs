@@ -135,6 +135,7 @@ namespace GoogleARCore.Examples.CloudAnchors
 
         private bool m_MatchStarted = false;
 
+
         /// <summary>
         /// Enumerates modes the example application can be in.
         /// </summary>
@@ -174,10 +175,11 @@ namespace GoogleARCore.Examples.CloudAnchors
             _UpdateApplicationLifecycle();
 
             //Activete button that will start the game if two walls are placed and it has not been activated
-            if(wall_Count == 2 && StartButton.activeSelf == false && m_CurrentMode == ApplicationMode.Hosting && !Started)
+            if(wall_Count == 2 /* && StartButton.activeSelf == false */ && m_CurrentMode == ApplicationMode.Hosting && !Started)
             {
                 Started = true;
                 StartButton.SetActive(true);
+                
             }
 
             //If not host search for objects
@@ -243,8 +245,10 @@ namespace GoogleARCore.Examples.CloudAnchors
             // {
             //     SpawnedBall.GetComponent<Ball>().StartBallMovement();
             //     SpawnedBall.GetComponent<Ball>().CmdsetP2Back(P2back);
-            //     if(m_CurrentMode != ApplicationMode.Hosting)
-            //         SpawnedBall.GetComponent<Ball>().isP2 = true;
+            
+            if(m_CurrentMode != ApplicationMode.Hosting && !SpawnedBall.GetComponent<Ball>().isP2)
+                     SpawnedBall.GetComponent<Ball>().isP2 = true;
+
                     
             // }
             TrackableHit arcoreHitResult = new TrackableHit();
@@ -518,8 +522,10 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             Destroy(StartButton);
             SpawnedBall.GetComponent<Ball>().StartBallMovement();
-            SpawnedBall.GetComponent<Ball>().CmdsetP2Back(P2back);
-            SpawnedBall.GetComponent<Ball>().isP2 = true;
+            //SpawnedBall.GetComponent<Ball>().CmdsetP2Back(P2back);
+
+            SpawnedBall.GetComponent<Ball>().RpcRemoveSnackbar();
+            //SpawnedBall.GetComponent<Ball>().isP2 = false;
         }
 
         /// <summary>
