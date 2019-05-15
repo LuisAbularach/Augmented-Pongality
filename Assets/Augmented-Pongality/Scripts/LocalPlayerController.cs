@@ -31,7 +31,6 @@ namespace GoogleARCore.Examples.CloudAnchors
 #pragma warning restore 618
     {
 
-        
         public GameObject BallPrefab;
         public GameObject SecondPlayerZone;
         GameObject BallInPlay;

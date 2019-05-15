@@ -35,6 +35,7 @@ namespace GoogleARCore.Examples.CloudAnchors
 #pragma warning restore 618
     public class NetworkManagerUIController : MonoBehaviour
     {
+        public GameObject SPF,BallObject,ARplains;
         /// <summary>
         /// The Lobby Screen to see Available Rooms or create a new one.
         /// </summary>
@@ -224,6 +225,19 @@ namespace GoogleARCore.Examples.CloudAnchors
             }
         }
 
+        //Single Player (NOT IMPLIMENTED)
+        // public void StartSignlePlayer()
+        // {
+        //     var SinglePlayerField = Instantiate(SPF, new Vector3(0,0,0), Quaternion.Euler(0,0,0));
+        //     var CAC = GameObject.FindGameObjectWithTag("cloudcontrol");
+        //     CAC.GetComponent<CloudAnchorsExampleController>().SPF = SinglePlayerField;
+        //     GameObject.Destroy(GameObject.Find("Play Alone"));
+        //     var BallSingle = Instantiate(BallObject, new Vector3(0,1,0), Quaternion.Euler(0,0,0));
+        //     BallSingle.GetComponent<Ball>().inPlay=true;
+        //     BallSingle.GetComponent<Ball>().SinglePlayer=true;
+        //     CAC.GetComponent<CloudAnchorsExampleController>().SpawnedBall = BallSingle;
+        // }
+
         /// <summary>
         /// Callback indicating that the Cloud Anchor was resolved.
         /// </summary>
@@ -387,6 +401,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         public void _startGame()
         {
             CloudAnchorsExampleController.GetComponent<CloudAnchorsExampleController>()._StartGame();
+            ARplains.SetActive(false);
             RemoveSnackbar();
         }
         private string _GetRoomNumberFromNetworkId(NetworkID networkID)

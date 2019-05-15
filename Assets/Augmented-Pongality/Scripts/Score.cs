@@ -32,13 +32,13 @@ public class Score : NetworkBehaviour
         int won;
         if (whoWon == 1) // you Won
         {
-            yourScore++;
+            enemyScore++;
             // Debug.Log("Player 1 score: " + yourScore);
             won = 1;
         }
         else  // enemy won
         {
-            enemyScore++;
+            yourScore++;
             // Debug.Log("Player 2 Enemy won score: " + enemyScore);
             won = 2;
         }
@@ -49,6 +49,14 @@ public class Score : NetworkBehaviour
         Debug.Log("Player 1 score: " + yourScore);
         Debug.Log("Player 2 Enemy Score: " + enemyScore);
         return won;
+    }
+
+    public void ResetScore()
+    {
+        yourScore = 0;
+        enemyScore = 0;
+        OnScoreChange(yourScore,enemyScore);
+        RpcCheckScoreUpdates(yourScore,enemyScore);
     }
 
     [ClientRpc]
