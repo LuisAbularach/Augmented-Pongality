@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.43667588, g: 0.48427194, b: 0.564524, a: 1}
+  m_IndirectSpecularColor: {r: 0.43667555, g: 0.48427123, b: 0.5645229, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1049,6 +1049,7 @@ MonoBehaviour:
   LeftWall: {fileID: 0}
   RightWall: {fileID: 0}
   SPF: {fileID: 0}
+  DarkCanvas: {fileID: 631872871}
   SpawnedBall: {fileID: 0}
   UIController: {fileID: 1077067569}
   ARCoreRoot: {fileID: 1995596071}
@@ -2116,6 +2117,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 624944428}
   m_CullTransparentMesh: 0
+--- !u!1 &631872871 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5202515609758906443, guid: 98eb168500d97f145803ff99efb58cc0,
+    type: 3}
+  m_PrefabInstance: {fileID: 1425525002}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &635649537
 GameObject:
   m_ObjectHideFlags: 0
@@ -3582,7 +3589,12 @@ MonoBehaviour:
   fieldBound: 0
   playerArea: 0
   front: 0
+  back2: 0
   back: 0
+  front2: 0
+  P2Field: {fileID: 0}
+  inPlay: 0
+  customizedSetting: 0
 --- !u!1 &1355360315
 GameObject:
   m_ObjectHideFlags: 0
@@ -3723,7 +3735,7 @@ PrefabInstance:
     - target: {fileID: 5202515609758906442, guid: 98eb168500d97f145803ff99efb58cc0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 5202515609758906442, guid: 98eb168500d97f145803ff99efb58cc0,
         type: 3}

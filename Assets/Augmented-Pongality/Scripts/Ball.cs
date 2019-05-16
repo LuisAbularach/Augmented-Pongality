@@ -53,7 +53,7 @@ public class Ball : NetworkBehaviour
         P1score = 0;
         P2score = 0;
 
-        isP2 = false;
+            isP2 = true;
         darkenSet = false;
         P1back = -.5f;
         Debug.Log("START BALL!!!");
@@ -205,11 +205,12 @@ public class Ball : NetworkBehaviour
 
             GameObject.FindGameObjectWithTag("cloudcontrol").GetComponent<CloudAnchorsExampleController>().DarkCanvas.SetActive(false);
 
-        transform.position = new Vector3(0, 0.5f, 0);
+        transform.position = new Vector3(0, 1f, 0);
 
         StartButton.SetActive(true);
 
-        Score.GetComponent<Score>().ResetScore();
+        if(!isP2)
+            Score.GetComponent<Score>().ResetScore();
 
         stopdark = true;
     }
