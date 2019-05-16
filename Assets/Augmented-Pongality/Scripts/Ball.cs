@@ -199,7 +199,7 @@ public class Ball : NetworkBehaviour
         //Call when game is won
         inPlay = false;
         movementSpeed = 0.5f;
-
+            direction = new Vector3(0, 0, 0);
             P1score = 0;
             P2score = 0;
 
