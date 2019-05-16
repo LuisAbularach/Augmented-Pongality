@@ -35,19 +35,25 @@ public class Ball : NetworkBehaviour
 
     public delegate void SetUpComplete();
     public static event SetUpComplete OnSetUpComplete;
+    [SyncVar] int darkentime;
+    [SyncVar] bool startdark;
+    [SyncVar] bool stopdark;
     
     public GameObject Score; // added because removed static from score
     bool setUpComplete = true;
     // Start is called before the first frame update
     void Start()
     {
+        //GameObject.Find("DarkenCanvas").SetActive(true);
+        
+
         //Load preferences
         ScoreToWin = PlayerPrefs.GetInt("maxScore");
+        darkentime = PlayerPrefs.GetInt("OutofBoundsTimer");
         P1score = 0;
         P2score = 0;
 
-        SinglePlayer = false;
-        isP2 = true;
+        isP2 = false;
         darkenSet = false;
         P1back = -.5f;
         Debug.Log("START BALL!!!");
@@ -63,14 +69,27 @@ public class Ball : NetworkBehaviour
         Player = GameObject.Find("LocalPlayer");
 
         Camera = GameObject.FindGameObjectWithTag("MainCamera");
-        rb = gameObject.GetComponent<Rigidbody>(); 
+        rb = gameObject.GetComponent<Rigidbody>();
+
     }
 
 
     // Update is called once per frame
     void Update()
     {
-        if(inPlay && !SinglePlayer){
+            if (startdark)
+            {
+                Camera.GetComponent<DarkenAR>().GameStarted(Score, darkentime);
+                startdark = false;
+            }
+
+            if (stopdark)
+            {
+                Camera.GetComponent<DarkenAR>().Stop();
+                stopdark = false;
+            }
+
+        if (inPlay && !SinglePlayer){
             //Score
             if (transform.position.z >=  P2Back)
             {
@@ -144,12 +163,12 @@ public class Ball : NetworkBehaviour
             }
 
             //P2 needs to change the values to their field
-            if(isP2&&!darkenSet)
-            {
-                GameObject.Find("DarkenCanvas").SetActive(true);
-                Camera.GetComponent<DarkenAR>().SetPlayer2Field(P2Back - .5f);
-                darkenSet = true;
-            }
+            //if(isP2&&!darkenSet)
+            //{
+            //    GameObject.Find("DarkenCanvas").SetActive(true);
+            //    Camera.GetComponent<DarkenAR>().SetPlayer2Field(P2Back - .5f);
+            //    darkenSet = true;
+            //}
             
         }
 
@@ -181,15 +200,24 @@ public class Ball : NetworkBehaviour
         inPlay = false;
         movementSpeed = 0.5f;
 
+            P1score = 0;
+            P2score = 0;
+
+            GameObject.FindGameObjectWithTag("cloudcontrol").GetComponent<CloudAnchorsExampleController>().DarkCanvas.SetActive(false);
+
         transform.position = new Vector3(0, 0.5f, 0);
 
         StartButton.SetActive(true);
 
         Score.GetComponent<Score>().ResetScore();
+
+        stopdark = true;
     }
+
 
     public void StartBallMovement(GameObject Button)
     {
+        stopdark = 
         StartButton = Button;
         StartButton.SetActive(false); 
 
@@ -199,11 +227,10 @@ public class Ball : NetworkBehaviour
         isP2 = false;
         Debug.Log(inPlay);
 
-        // transform.position += direction * Time.deltaTime * movementSpeed;
-
-        //Enable panel to darken screen
-        Canvas = GameObject.Find("DarkenCanvas");
-        //Canvas.SetActive(true);
+        
+        
+        startdark = true;
+        
     }
 
 

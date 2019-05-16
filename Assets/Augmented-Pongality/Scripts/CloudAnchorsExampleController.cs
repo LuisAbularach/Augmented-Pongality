@@ -25,10 +25,10 @@ namespace GoogleARCore.Examples.CloudAnchors
     using UnityEngine.Networking;
     using UnityEngine.SceneManagement;
 
-#if UNITY_EDITOR
-    // Set up touch input propagation while using Instant Preview in the editor.
-    using Input = InstantPreviewInput;
-    #endif
+//#if UNITY_EDITOR
+//    // Set up touch input propagation while using Instant Preview in the editor.
+//    using Input = InstantPreviewInput;
+//    #endif
 
     /// <summary>
     /// Controller for the Cloud Anchors Example. Handles the ARCore lifecycle.
@@ -52,6 +52,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         public GameObject LeftWall,RightWall;
 
         public GameObject SPF;
+        public GameObject DarkCanvas;
 
         public GameObject SpawnedBall;
         /// <summary>
@@ -252,15 +253,6 @@ namespace GoogleARCore.Examples.CloudAnchors
                 return;
             }
 
-        //touch
-            // if(wall_Count == 2 && SpawnedBall!=null)
-            // {
-            //     SpawnedBall.GetComponent<Ball>().StartBallMovement();
-            //     SpawnedBall.GetComponent<Ball>().CmdsetP2Back(P2back);
-            
-            if(m_CurrentMode != ApplicationMode.Hosting && !SpawnedBall.GetComponent<Ball>().isP2)
-                     SpawnedBall.GetComponent<Ball>().isP2 = true;
-
                     
             // }
             TrackableHit arcoreHitResult = new TrackableHit();
@@ -454,9 +446,12 @@ namespace GoogleARCore.Examples.CloudAnchors
             Debug.Log("Spawning Ball");
             if(wall_Count==1){
             //Ball
-            GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
-                .CmdSpawnBall(m_LastHitPose.Value.position, Quaternion.Euler(0,0,0),P2back);
-            SpawnedBall = GameObject.Find("Ball(Clone)");
+                GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
+                    .CmdSpawnBall(m_LastHitPose.Value.position, Quaternion.Euler(0,0,0),P2back);
+                SpawnedBall = GameObject.Find("Ball(Clone)");
+
+             DarkCanvas.SetActive(false);
+
             }
         }
 
@@ -547,6 +542,8 @@ namespace GoogleARCore.Examples.CloudAnchors
 
             SpawnedBall.GetComponent<Ball>().RpcRemoveSnackbar();
             //SpawnedBall.GetComponent<Ball>().isP2 = false;
+
+            DarkCanvas.SetActive(true);
         }
 
         /// <summary>
